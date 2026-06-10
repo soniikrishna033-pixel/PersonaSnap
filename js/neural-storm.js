@@ -55,7 +55,43 @@ export function initNeuralStorm() {
 
     camera.position.z = 500;
 
-    const particleCount = isTouchDevice ? 40 : 120;
+    const brainGroup = new THREE.Group();
+    scene.add(brainGroup);
+
+    function generateBrainPoint() {
+      let x, y, z;
+      while (true) {
+        // Random point in a bounding box
+        x = (Math.random() - 0.5) * 500; // width (X)
+        y = (Math.random() - 0.5) * 400; // height (Y)
+        z = (Math.random() - 0.5) * 600; // length (Z)
+        
+        let nx = x / 250;
+        let ny = y / 200;
+        let nz = z / 300;
+        
+        // Ellipsoid check
+        let r2 = (nx*nx) + (ny*ny) + (nz*nz);
+        if (r2 > 1.0) continue;
+        
+        // Longitudinal fissure (split hemispheres)
+        if (Math.abs(nx) < 0.1) continue;
+        
+        // Flatten bottom
+        if (ny < -0.4 && Math.abs(nz) < 0.5) continue;
+        if (ny < -0.6) continue;
+        
+        // Narrower front (assume front is positive z)
+        if (nz > 0.2) {
+          if (Math.abs(nx) > (1.0 - 0.5 * nz)) continue;
+        }
+        
+        // It's a valid point
+        return { x, y, z };
+      }
+    }
+
+    const particleCount = isTouchDevice ? 150 : 350;
     const particles = [];
     const particleGeometry = new THREE.BufferGeometry();
     const particlePositions = new Float32Array(particleCount * 3);
@@ -63,33 +99,32 @@ export function initNeuralStorm() {
     
     // Custom material to allow individual vertex colors (for pulsing)
     const particleMaterial = new THREE.PointsMaterial({
-      size: 2.5,
+      size: 3.5,
       vertexColors: true,
       transparent: true,
-      opacity: 0.8,
+      opacity: 0.9,
       sizeAttenuation: true
     });
 
-    const baseColor = new THREE.Color(0xffffff);
+    const baseColor = new THREE.Color(0x06B6D4);
 
     for (let i = 0; i < particleCount; i++) {
-      const x = Math.random() * window.innerWidth - window.innerWidth / 2;
-      const y = Math.random() * heroSection.clientHeight - heroSection.clientHeight / 2;
-      const z = (Math.random() - 0.5) * 200;
+      const pt = generateBrainPoint();
       
-      particlePositions[i * 3] = x;
-      particlePositions[i * 3 + 1] = y;
-      particlePositions[i * 3 + 2] = z;
+      particlePositions[i * 3] = pt.x;
+      particlePositions[i * 3 + 1] = pt.y;
+      particlePositions[i * 3 + 2] = pt.z;
 
       particleColors[i * 3] = baseColor.r;
       particleColors[i * 3 + 1] = baseColor.g;
       particleColors[i * 3 + 2] = baseColor.b;
 
       particles.push({
-        x: x, y: y, z: z,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        baseX: x, baseY: y,
+        x: pt.x, y: pt.y, z: pt.z,
+        vx: (Math.random() - 0.5) * 0.2,
+        vy: (Math.random() - 0.5) * 0.2,
+        vz: (Math.random() - 0.5) * 0.2,
+        baseX: pt.x, baseY: pt.y, baseZ: pt.z,
         isPulsing: false,
         pulseIntensity: 0
       });
@@ -99,13 +134,13 @@ export function initNeuralStorm() {
     particleGeometry.setAttribute('color', new THREE.BufferAttribute(particleColors, 3));
     
     const particleSystem = new THREE.Points(particleGeometry, particleMaterial);
-    scene.add(particleSystem);
+    brainGroup.add(particleSystem);
 
     // Line setup
     const lineMaterial = new THREE.LineBasicMaterial({
-      color: 0x7c3aed,
+      color: 0x00ffff,
       transparent: true,
-      opacity: 0.15
+      opacity: 0.2
     });
     
     // Max lines = (n * (n-1)) / 2
@@ -115,7 +150,7 @@ export function initNeuralStorm() {
     lineGeometry.setAttribute('position', new THREE.BufferAttribute(linePositions, 3));
     
     const lineMesh = new THREE.LineSegments(lineGeometry, lineMaterial);
-    scene.add(lineMesh);
+    brainGroup.add(lineMesh);
 
     // Interaction variables
     const mouse = new THREE.Vector2(-9999, -9999);
@@ -293,9 +328,10 @@ export function initNeuralStorm() {
           const p2 = particles[j];
           const ddx = p.x - p2.x;
           const ddy = p.y - p2.y;
-          const distance = Math.sqrt(ddx*ddx + ddy*ddy);
+          const ddz = p.z - p2.z;
+          const distance = Math.sqrt(ddx*ddx + ddy*ddy + ddz*ddz);
 
-          if (distance < 150) {
+          if (distance < 120) {
             linePositions[lineVertexIndex++] = p.x;
             linePositions[lineVertexIndex++] = p.y;
             linePositions[lineVertexIndex++] = p.z;
@@ -313,6 +349,9 @@ export function initNeuralStorm() {
       // Update lines
       lineMesh.geometry.setDrawRange(0, lineVertexIndex / 3);
       lineMesh.geometry.attributes.position.needsUpdate = true;
+
+      // Rotate the entire brain group
+      brainGroup.rotation.y += 0.002;
 
       renderer.render(scene, camera);
     }
