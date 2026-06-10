@@ -286,16 +286,10 @@
 
   </div>
 
-  <script>
-    const mockUser = JSON.parse(localStorage.getItem('mockUser'));
-    const mockXp = parseInt(localStorage.getItem('mockXp') || 0);
-    
-    if (mockUser) {
-      document.getElementById('lb-avatar').src = mockUser.photoURL;
-      document.getElementById('lb-name').textContent = mockUser.displayName + " (You)";
-    }
-    document.getElementById('lb-xp').textContent = mockXp.toLocaleString();
-    
+  <script type="module">
+    import { auth } from '/js/firebase.js';
+    import { getLeaderboard } from '/js/user-db.js';
+
     function getLevel(xp) {
       if (xp >= 7000) return '👑 Legendary';
       if (xp >= 3500) return '💎 Diamond';
@@ -303,7 +297,77 @@
       if (xp >= 500) return '🥈 Silver';
       return '🥉 Bronze';
     }
-    document.getElementById('lb-level').textContent = getLevel(mockXp);
+
+    async function loadLeaderboard() {
+      const lbData = await getLeaderboard();
+      const tbody = document.querySelector('tbody');
+      
+      if (lbData.length > 0) {
+        tbody.innerHTML = ''; // clear mock data
+        
+        let rank = 1;
+        lbData.forEach(user => {
+          const isCurrentUser = auth.currentUser && user.uid === auth.currentUser.uid;
+          
+          let rankClass = '';
+          if (rank === 1) rankClass = 'rank-1';
+          else if (rank === 2) rankClass = 'rank-2';
+          else if (rank === 3) rankClass = 'rank-3';
+
+          const tr = document.createElement('tr');
+          if (isCurrentUser) tr.className = 'current-user';
+
+          tr.innerHTML = `
+            <td class="rank-number ${rankClass}">#${rank}</td>
+            <td>
+              <div class="user-cell">
+                <img src="${user.photoURL || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + user.displayName}">
+                <span>${user.displayName} ${isCurrentUser ? '(You)' : ''}</span>
+              </div>
+            </td>
+            <td>${getLevel(user.xp || 0)}</td>
+            <td style="color: var(--gold); font-weight: bold;">${(user.xp || 0).toLocaleString()}</td>
+            <td>${user.quizzesTaken || 0}</td>
+          `;
+          tbody.appendChild(tr);
+          rank++;
+        });
+        
+        // Update podium
+        if (lbData[0]) updatePodium(1, lbData[0]);
+        if (lbData[1]) updatePodium(2, lbData[1]);
+        if (lbData[2]) updatePodium(3, lbData[2]);
+      } else {
+        // Fallback to mock for local testing
+        const mockUser = JSON.parse(localStorage.getItem('mockUser'));
+        const mockXp = parseInt(localStorage.getItem('mockXp') || 0);
+        
+        if (mockUser) {
+          const lbAvatar = document.getElementById('lb-avatar');
+          const lbName = document.getElementById('lb-name');
+          const lbXp = document.getElementById('lb-xp');
+          const lbLevel = document.getElementById('lb-level');
+          
+          if(lbAvatar) lbAvatar.src = mockUser.photoURL;
+          if(lbName) lbName.textContent = mockUser.displayName + " (You)";
+          if(lbXp) lbXp.textContent = mockXp.toLocaleString();
+          if(lbLevel) lbLevel.textContent = getLevel(mockXp);
+        }
+      }
+    }
+
+    function updatePodium(place, user) {
+      const podiumItem = document.querySelector(`.place-${place}`);
+      if (podiumItem) {
+        podiumItem.querySelector('.podium-avatar').src = user.photoURL || 'https://api.dicebear.com/7.x/avataaars/svg?seed=' + user.displayName;
+        podiumItem.querySelector('.podium-name').textContent = user.displayName;
+        podiumItem.querySelector('.podium-xp').textContent = `${(user.xp || 0).toLocaleString()} XP`;
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadLeaderboard();
+    });
   </script>
 </body>
 </html>

@@ -39,7 +39,10 @@ export const signIn = async () => {
         quizzesTaken: 0,
         createdAt: new Date().toISOString(),
         streak: 0,
-        lastActive: new Date().toISOString()
+        lastActive: new Date().toISOString(),
+        readBlogs: [],
+        knowledgePoints: 0,
+        quizHistory: []
       });
     }
     window.location.reload();

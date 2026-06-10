@@ -270,24 +270,46 @@
 
   <script type="module">
     import { logOut } from '/js/auth.js';
+    import { auth } from '/js/firebase.js';
+    import { getUserProfile } from '/js/user-db.js';
     import { quizzes } from '/js/quizzes.js';
 
     document.getElementById('btn-logout').addEventListener('click', () => {
       logOut();
     });
 
-    // Populate Mock Data
-    const mockUser = JSON.parse(localStorage.getItem('mockUser'));
-    if (!mockUser) {
-      window.location.href = '/';
-    }
+    // Populate Data
+    auth.onAuthStateChanged(async (user) => {
+      let userData = null;
+      
+      if (user) {
+        userData = await getUserProfile(user.uid);
+      }
+      
+      if (!userData) {
+        // Fallback to mock if not logged in or fetching fails
+        const mockUser = JSON.parse(localStorage.getItem('mockUser'));
+        if (!mockUser) {
+          window.location.href = '/';
+          return;
+        }
+        userData = {
+          displayName: mockUser.displayName,
+          photoURL: mockUser.photoURL,
+          xp: parseInt(localStorage.getItem('mockXp') || 0),
+          readBlogs: JSON.parse(localStorage.getItem('readBlogs') || '[]'),
+          knowledgePoints: parseInt(localStorage.getItem('knowledgePoints') || 0),
+          readingStreak: parseInt(localStorage.getItem('readingStreak') || 0),
+          quizHistory: JSON.parse(localStorage.getItem('quizHistory') || '[]')
+        };
+      }
 
-    document.getElementById('profile-name').textContent = mockUser.displayName;
-    document.getElementById('profile-avatar').src = mockUser.photoURL;
+      document.getElementById('profile-name').textContent = userData.displayName || 'User';
+      if (userData.photoURL) document.getElementById('profile-avatar').src = userData.photoURL;
 
-    // Load XP
-    let currentXp = parseInt(localStorage.getItem('mockXp') || 0);
-    document.getElementById('current-xp').textContent = `${currentXp} XP`;
+      // Load XP
+      let currentXp = userData.xp || 0;
+      document.getElementById('current-xp').textContent = `${currentXp} XP`;
     
     function getLevelInfo(xp) {
       if (xp >= 7000) return { name: 'Legendary', emoji: '👑', next: null, min: 7000 };
@@ -318,16 +340,16 @@
     }
 
     // Reading Tracker Stats
-    const readBlogs = JSON.parse(localStorage.getItem('readBlogs') || '[]');
-    const kp = parseInt(localStorage.getItem('knowledgePoints') || 0);
-    const readingStreak = parseInt(localStorage.getItem('readingStreak') || 0);
+    const readBlogs = userData.readBlogs || [];
+    const kp = userData.knowledgePoints || 0;
+    const readingStreak = userData.readingStreak || 0;
     
     document.getElementById('stat-articles').textContent = readBlogs.length;
     document.getElementById('stat-kp').textContent = kp;
     document.getElementById('stat-read-streak').textContent = '🔥 ' + readingStreak;
 
     // Load History & Growth Score
-    const history = JSON.parse(localStorage.getItem('quizHistory') || '[]');
+    const history = userData.quizHistory || [];
     let quizImprovementPoints = 0;
 
     if (history.length > 0) {
@@ -416,6 +438,7 @@
         scoreElement.textContent = currentScore;
       }
     }, 50);
+    });
   </script>
   <script src="/js/snap.js"></script>
 </body>

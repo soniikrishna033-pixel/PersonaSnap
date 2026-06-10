@@ -1,4 +1,6 @@
 import { quizzes } from './quizzes.js';
+import { auth } from './firebase.js';
+import { syncQuizResult } from './user-db.js';
 
 const urlParams = new URLSearchParams(window.location.search);
 const quizId = urlParams.get('id');
@@ -186,7 +188,7 @@ function showTransition() {
   }, 600);
 }
 
-function finishQuiz() {
+async function finishQuiz() {
   if(globalTimer) clearInterval(globalTimer);
   if(questionTimer) clearInterval(questionTimer);
   
@@ -237,6 +239,17 @@ function finishQuiz() {
 
   localStorage.setItem('quizStreak', streak.toString());
   localStorage.setItem('lastQuizDate', today);
+  
+  const currentXp = parseInt(localStorage.getItem('mockXp') || 0) + baseXP;
+  localStorage.setItem('mockXp', currentXp);
+  
+  if (auth.currentUser) {
+    try {
+      await syncQuizResult(auth.currentUser.uid, resultData, currentXp, streak);
+    } catch (e) {
+      console.error("Failed to sync quiz result to Firebase", e);
+    }
+  }
 
   window.location.href = '/result.html';
 }

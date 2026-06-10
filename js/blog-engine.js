@@ -1,4 +1,6 @@
 import { blogs } from './blogs.js';
+import { auth } from './firebase.js';
+import { syncBlogRead } from './user-db.js';
 
 document.addEventListener('DOMContentLoaded', () => {
   const progressBar = document.getElementById('reading-progress');
@@ -93,6 +95,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         localStorage.setItem('readingStreak', streak);
         localStorage.setItem('lastReadDate', today);
+      }
+      
+      if (auth.currentUser) {
+        syncBlogRead(auth.currentUser.uid, blogId, kp, streak).catch(e => console.error("Firebase sync error", e));
       }
       
       console.log(`Awarded 50 KP! Total KP: ${kp}`);
