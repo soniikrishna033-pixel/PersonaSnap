@@ -1,38 +1,51 @@
 export class BrainLogo {
   constructor(containerId, size = 45, interactive = true) {
+    if (window.innerWidth < 768) {
+      console.log('3D disabled on mobile');
+      return;
+    }
+    
     this.container = document.getElementById(containerId);
     if (!this.container) return;
 
-    this.size = size;
-    this.interactive = interactive;
-    this.container.style.width = `${size}px`;
-    this.container.style.height = `${size}px`;
-    this.container.style.position = 'relative';
-    this.container.style.display = 'inline-block';
-    this.container.style.verticalAlign = 'middle';
-    this.container.style.filter = 'drop-shadow(0 0 20px rgba(124, 58, 237, 0.5))';
+    try {
+      this.size = size;
+      this.interactive = interactive;
+      this.container.style.width = `100%`;
+      this.container.style.maxWidth = `${size}px`;
+      this.container.style.height = `auto`;
+      this.container.style.position = 'relative';
+      this.container.style.display = 'inline-block';
+      this.container.style.verticalAlign = 'middle';
+      this.container.style.filter = 'drop-shadow(0 0 20px rgba(124, 58, 237, 0.5))';
 
-    this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
-    this.camera.position.z = 10;
+      this.scene = new THREE.Scene();
+      this.camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+      this.camera.position.z = 10;
 
-    this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    this.renderer.setSize(size, size);
-    this.renderer.setPixelRatio(window.devicePixelRatio);
-    this.container.appendChild(this.renderer.domElement);
+      this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+      this.renderer.setSize(size, size);
+      this.renderer.domElement.style.width = '100%';
+      this.renderer.domElement.style.height = 'auto';
+      this.renderer.domElement.style.maxWidth = '100vw';
+      this.renderer.setPixelRatio(window.devicePixelRatio);
+      this.container.appendChild(this.renderer.domElement);
 
-    this.createBrainMesh();
-    this.setupLighting();
+      this.createBrainMesh();
+      this.setupLighting();
 
-    this.baseSpeed = 0.01;
-    this.currentSpeed = this.baseSpeed;
-    this.targetSpeed = this.baseSpeed;
+      this.baseSpeed = 0.01;
+      this.currentSpeed = this.baseSpeed;
+      this.targetSpeed = this.baseSpeed;
 
-    if (this.interactive) {
-      this.setupInteractions();
+      if (this.interactive) {
+        this.setupInteractions();
+      }
+
+      this.animate();
+    } catch (e) {
+      console.log('3D disabled');
     }
-
-    this.animate();
   }
 
   createBrainMesh() {
