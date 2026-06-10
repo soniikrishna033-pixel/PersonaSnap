@@ -61,21 +61,21 @@ export function initNeuralStorm() {
     function generateBrainPoint() {
       let x, y, z;
       while (true) {
-        // Random point in a bounding box
-        x = (Math.random() - 0.5) * 500; // width (X)
-        y = (Math.random() - 0.5) * 400; // height (Y)
-        z = (Math.random() - 0.5) * 600; // length (Z)
+        // Random point in a larger bounding box to space things out
+        x = (Math.random() - 0.5) * 700; // width (X)
+        y = (Math.random() - 0.5) * 500; // height (Y)
+        z = (Math.random() - 0.5) * 800; // length (Z)
         
-        let nx = x / 250;
-        let ny = y / 200;
-        let nz = z / 300;
+        let nx = x / 350;
+        let ny = y / 250;
+        let nz = z / 400;
         
         // Ellipsoid check
         let r2 = (nx*nx) + (ny*ny) + (nz*nz);
         if (r2 > 1.0) continue;
         
-        // Longitudinal fissure (split hemispheres)
-        if (Math.abs(nx) < 0.1) continue;
+        // Longitudinal fissure (split hemispheres) - make gap wider
+        if (Math.abs(nx) < 0.15) continue;
         
         // Flatten bottom
         if (ny < -0.4 && Math.abs(nz) < 0.5) continue;
@@ -91,7 +91,8 @@ export function initNeuralStorm() {
       }
     }
 
-    const particleCount = isTouchDevice ? 150 : 350;
+    // Reduce particle count to make it less congested
+    const particleCount = isTouchDevice ? 100 : 200;
     const particles = [];
     const particleGeometry = new THREE.BufferGeometry();
     const particlePositions = new Float32Array(particleCount * 3);
@@ -140,7 +141,7 @@ export function initNeuralStorm() {
     const lineMaterial = new THREE.LineBasicMaterial({
       color: 0x00ffff,
       transparent: true,
-      opacity: 0.2
+      opacity: 0.15
     });
     
     // Max lines = (n * (n-1)) / 2
@@ -331,7 +332,7 @@ export function initNeuralStorm() {
           const ddz = p.z - p2.z;
           const distance = Math.sqrt(ddx*ddx + ddy*ddy + ddz*ddz);
 
-          if (distance < 120) {
+          if (distance < 90) {
             linePositions[lineVertexIndex++] = p.x;
             linePositions[lineVertexIndex++] = p.y;
             linePositions[lineVertexIndex++] = p.z;
