@@ -15,48 +15,8 @@ export function initNeuralStorm() {
   heroSection.appendChild(orb2);
   heroSection.appendChild(orb3);
 
-  // Layer 3: Floating Symbols
-  const symbols = ["🧠","⚡","💭","✨","🔮","💡","🌀","💎","🎯","🔬","🌟","💫","🧩","📊","🎭"];
-  const maxSymbols = isMobile ? 8 : 15;
-  let activeSymbols = 0;
+  // Layer 3: Floating Symbols removed as requested
 
-  function spawnSymbol() {
-    if (activeSymbols >= maxSymbols) return;
-    
-    const el = document.createElement('div');
-    el.className = 'floating-symbol';
-    el.textContent = symbols[Math.floor(Math.random() * symbols.length)];
-    
-    // Randomize properties
-    const size = Math.random() * 16 + 16; // 16px to 32px
-    const opacity = Math.random() * 0.3 + 0.1; // 0.1 to 0.4
-    const duration = Math.random() * 60 + 60; // 60s to 120s
-    const startX = Math.random() * 100; // 0% to 100%
-    const driftX = (Math.random() * 200 - 100) + 'px'; // -100px to 100px drift
-    
-    el.style.fontSize = size + 'px';
-    el.style.left = startX + '%';
-    el.style.setProperty('--max-opacity', opacity);
-    el.style.setProperty('--drift-x', driftX);
-    el.style.animationDuration = duration + 's';
-    
-    heroSection.appendChild(el);
-    activeSymbols++;
-
-    // Remove when animation finishes
-    setTimeout(() => {
-      if (el.parentNode) el.parentNode.removeChild(el);
-      activeSymbols--;
-    }, duration * 1000);
-  }
-
-  // Initial batch
-  for (let i = 0; i < maxSymbols / 2; i++) {
-    setTimeout(spawnSymbol, Math.random() * 5000);
-  }
-
-  // Spawn loop
-  setInterval(spawnSymbol, 4000);
 
   // Layer 2: Three.js Network
   if (!window.THREE) return;
