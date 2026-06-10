@@ -1,0 +1,493 @@
+/* Snap Mascot CSS */
+
+#snap-container {
+  position: fixed;
+  z-index: 9999;
+  transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  pointer-events: none; /* Let clicks pass through except on snap itself */
+}
+
+/* Base Body */
+.snap-body {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #7C3AED, #4C1D95);
+  box-shadow: 0 0 30px #7C3AED, 0 0 60px rgba(124, 58, 237, 0.4);
+  position: relative;
+  cursor: pointer;
+  pointer-events: auto;
+  animation: floatSnap 2s ease-in-out infinite;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+@keyframes floatSnap {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@media (max-width: 768px) {
+  .snap-body {
+    width: 60px;
+    height: 60px;
+  }
+}
+
+/* Eyes */
+.snap-eyes {
+  display: flex;
+  gap: 12px;
+  position: relative;
+  top: -5px;
+  transition: all 0.3s ease;
+}
+
+.snap-eye {
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+  animation: blink 3.5s infinite;
+}
+
+.snap-eye::after {
+  content: '';
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #000;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  transition: all 0.2s ease;
+}
+
+@keyframes blink {
+  0%, 96%, 98%, 100% { transform: scaleY(1); }
+  97% { transform: scaleY(0.1); }
+}
+
+/* Hover State */
+.snap-body:hover .snap-eyes {
+  transform: scale(1.3);
+}
+
+/* Expressions */
+.snap-happy .snap-eye {
+  border-radius: 50% 50% 0 0;
+  border-bottom: 2px solid #fff;
+  background: transparent;
+}
+.snap-happy .snap-eye::after { display: none; }
+
+.snap-thinking .snap-eyes > .snap-eye:first-child {
+  transform: scale(0.8) scaleY(0.5);
+}
+.snap-thinking::before {
+  content: '❓';
+  position: absolute;
+  top: -25px;
+  right: -10px;
+  font-size: 24px;
+  animation: floatUp 1s ease forwards;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(10px); opacity: 0; }
+  100% { transform: translateY(-10px); opacity: 1; }
+}
+
+.snap-excited {
+  animation: bounceFast 0.5s ease infinite alternate;
+}
+.snap-excited .snap-eyes {
+  transform: scale(1.4);
+}
+@keyframes bounceFast {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-15px); }
+}
+
+.snap-sad .snap-eye {
+  border-radius: 0 0 50% 50%;
+  border-top: 2px solid #fff;
+  background: transparent;
+  transform: translateY(5px);
+}
+.snap-sad .snap-eye::after { display: none; }
+
+.snap-sleeping .snap-eye {
+  height: 2px;
+  border-radius: 0;
+  background: #fff;
+  animation: none;
+}
+.snap-sleeping .snap-eye::after { display: none; }
+.snap-sleeping::before {
+  content: 'zzz';
+  position: absolute;
+  top: -25px;
+  right: -15px;
+  color: #fff;
+  font-weight: bold;
+  animation: floatUpZ 2s infinite linear;
+}
+
+@keyframes floatUpZ {
+  0% { transform: translateY(0) scale(0.5); opacity: 1; }
+  100% { transform: translateY(-20px) scale(1.5); opacity: 0; }
+}
+
+.snap-celebrating {
+  animation: spinWin 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+.snap-celebrating .snap-eye {
+  background: transparent;
+}
+.snap-celebrating .snap-eye::after {
+  content: '⭐';
+  background: transparent;
+  font-size: 14px;
+  transform: translate(-50%, -50%);
+}
+@keyframes spinWin {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(180deg) scale(1.2); }
+  100% { transform: rotate(360deg) scale(1); }
+}
+
+.snap-reading::after {
+  content: '📖';
+  position: absolute;
+  bottom: -10px;
+  font-size: 24px;
+  z-index: 10;
+}
+.snap-reading .snap-eyes {
+  transform: translateY(5px);
+}
+
+/* Crowns */
+.snap-crown {
+  position: absolute;
+  top: -25px;
+  font-size: 24px;
+  z-index: 1;
+  pointer-events: none;
+  animation: floatCrown 2s ease-in-out infinite;
+}
+@keyframes floatCrown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+/* Speech Bubble */
+.snap-bubble {
+  position: absolute;
+  bottom: 100%;
+  right: 50%;
+  background: var(--card-bg, #0F0F1E);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 10px 15px;
+  border-radius: 12px 12px 0 12px;
+  color: var(--text-main, #F8FAFC);
+  font-size: 0.9rem;
+  width: max-content;
+  max-width: 220px;
+  white-space: pre-line;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  pointer-events: none;
+  margin-bottom: 15px;
+}
+@media (max-width: 768px) {
+  .snap-bubble {
+    max-width: 150px;
+    font-size: 0.8rem;
+  }
+}
+.snap-bubble.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Chat Panel */
+#snap-chat-panel {
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
+  width: 320px;
+  height: 420px;
+  background: rgba(15, 15, 30, 0.97);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 16px;
+  z-index: 10000;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(20px);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  color: #F8FAFC;
+}
+
+#snap-chat-panel.active {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+@media (max-width: 768px) {
+  #snap-chat-panel {
+    bottom: 0;
+    right: 0;
+    width: 100%;
+    height: 70vh;
+    border-radius: 24px 24px 0 0;
+  }
+}
+
+.chat-header {
+  padding: 15px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--primary);
+}
+
+.chat-close {
+  cursor: pointer;
+  color: var(--text-muted);
+}
+
+.chat-body {
+  flex-grow: 1;
+  padding: 15px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.chat-msg {
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 0.9rem;
+  max-width: 85%;
+  line-height: 1.5;
+  white-space: pre-line;
+  word-wrap: break-word;
+  color: #F8FAFC;
+  animation: popIn 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes popIn {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.chat-msg.snap {
+  background: rgba(124, 58, 237, 0.2);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  align-self: flex-start;
+  border-bottom-left-radius: 4px;
+}
+
+.chat-msg.user {
+  background: rgba(255,255,255,0.1);
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+}
+
+.chat-input-area {
+  padding: 15px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  display: flex;
+  gap: 10px;
+}
+
+.chat-input {
+  flex-grow: 1;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: 10px;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.chat-send {
+  background: var(--primary);
+  border: none;
+  color: #fff;
+  padding: 0 15px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+/* Sound Toggle */
+.snap-mute-btn {
+  position: absolute;
+  top: -15px;
+  left: -20px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 10px;
+  cursor: pointer;
+  pointer-events: auto;
+  z-index: 10;
+}
+
+/* ─── Sparkle Burst ─── */
+.snap-sparkle {
+  position: absolute;
+  font-size: 14px;
+  pointer-events: none;
+  z-index: 20;
+  animation: sparkleBurst 0.8s ease-out forwards;
+}
+
+@keyframes sparkleBurst {
+  0% { transform: translate(0, 0) scale(0); opacity: 1; }
+  100% { transform: translate(var(--sx), var(--sy)) scale(1.2); opacity: 0; }
+}
+
+/* ─── Fire Crown (streak > 7) ─── */
+.snap-fire-crown {
+  animation: firePulse 0.5s ease-in-out infinite alternate !important;
+}
+
+@keyframes firePulse {
+  0% { transform: translateY(0) scale(1); text-shadow: 0 0 8px #F59E0B; }
+  100% { transform: translateY(-4px) scale(1.15); text-shadow: 0 0 16px #EF4444, 0 0 32px #F59E0B; }
+}
+
+/* ─── Crown Glow (Legendary) ─── */
+.snap-crown-glow {
+  text-shadow: 0 0 12px #F59E0B, 0 0 24px #F59E0B80;
+  animation: floatCrown 2s ease-in-out infinite, crownGlow 1.5s ease-in-out infinite alternate !important;
+}
+
+@keyframes crownGlow {
+  0% { text-shadow: 0 0 8px #F59E0B; }
+  100% { text-shadow: 0 0 20px #F59E0B, 0 0 40px #F59E0B80; }
+}
+
+/* ─── Position Variants ─── */
+.snap-container-home,
+.snap-container-blog {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+}
+
+.snap-container-quiz {
+  position: fixed;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.snap-container-result {
+  position: fixed;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.snap-container-dashboard {
+  /* Inline positioning handled by JS */
+}
+
+@media (max-width: 768px) {
+  .snap-container-home,
+  .snap-container-blog {
+    bottom: 80px;
+    right: 15px;
+  }
+  .snap-container-quiz {
+    left: 10px;
+    top: auto;
+    bottom: 80px;
+    transform: none;
+  }
+  .snap-container-result {
+    top: 80px;
+  }
+  #snap-container .snap-body {
+    width: 50px !important;
+    height: 50px !important;
+  }
+}
+
+/* ─── Onboarding Overlay ─── */
+.snap-onboarding-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.snap-onboarding-card {
+  background: rgba(15, 15, 30, 0.98);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(124, 58, 237, 0.3);
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  max-width: 380px;
+  width: 90%;
+  text-align: center;
+  z-index: 100000;
+  box-shadow: 0 20px 60px rgba(124, 58, 237, 0.2);
+  animation: popIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.snap-onboarding-text {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #F8FAFC;
+  margin-bottom: 1.5rem;
+  white-space: pre-line;
+}
+
+.snap-onboarding-btn {
+  font-size: 1rem;
+  padding: 12px 32px;
+}
+
+.snap-spotlight {
+  position: absolute;
+  border: 2px solid rgba(124, 58, 237, 0.5);
+  border-radius: 12px;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.7);
+  z-index: 99998;
+  pointer-events: none;
+  display: none;
+  transition: all 0.5s ease;
+}

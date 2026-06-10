@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Leaderboard – PersonaSnap</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <style>
+    .podium-section {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+      gap: 1rem;
+      margin: 4rem 0;
+      height: 300px;
+    }
+
+    .podium-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 120px;
+    }
+
+    .podium-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 3px solid;
+      margin-bottom: 1rem;
+      background: var(--bg-color);
+      z-index: 10;
+    }
+
+    .podium-block {
+      width: 100%;
+      background: linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-bottom: none;
+      border-radius: 12px 12px 0 0;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding-top: 1rem;
+      font-size: 2rem;
+      font-weight: bold;
+      color: white;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+
+    .place-1 .podium-avatar { border-color: #FFD700; width: 100px; height: 100px; }
+    .place-1 .podium-block { height: 160px; background: linear-gradient(180deg, rgba(255, 215, 0, 0.2) 0%, transparent 100%); border-color: rgba(255, 215, 0, 0.3); }
+    
+    .place-2 .podium-avatar { border-color: #C0C0C0; }
+    .place-2 .podium-block { height: 120px; background: linear-gradient(180deg, rgba(192, 192, 192, 0.2) 0%, transparent 100%); border-color: rgba(192, 192, 192, 0.3); }
+    
+    .place-3 .podium-avatar { border-color: #CD7F32; }
+    .place-3 .podium-block { height: 90px; background: linear-gradient(180deg, rgba(205, 127, 50, 0.2) 0%, transparent 100%); border-color: rgba(205, 127, 50, 0.3); }
+
+    .podium-name {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+      text-align: center;
+    }
+    .podium-xp {
+      font-size: 0.85rem;
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .tab-btn {
+      padding: 10px 20px;
+      border-radius: 20px;
+      color: var(--text-muted);
+      font-weight: 600;
+      transition: all var(--transition-fast);
+    }
+
+    .tab-btn.active {
+      background: rgba(124, 58, 237, 0.2);
+      color: var(--primary);
+    }
+
+    .tab-btn:hover:not(.active) {
+      background: rgba(255,255,255,0.05);
+      color: var(--text-main);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 8px;
+    }
+
+    tr {
+      background: rgba(255,255,255,0.02);
+      transition: all var(--transition-fast);
+    }
+
+    tr:hover {
+      background: rgba(255,255,255,0.05);
+      transform: scale(1.01);
+    }
+
+    tr.current-user {
+      background: rgba(124, 58, 237, 0.1);
+      border-left: 4px solid var(--primary);
+    }
+
+    td, th {
+      padding: 1rem;
+      text-align: left;
+    }
+
+    td:first-child { border-radius: 8px 0 0 8px; }
+    td:last-child { border-radius: 0 8px 8px 0; }
+
+    th {
+      background: transparent;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      padding-bottom: 0.5rem;
+    }
+
+    .rank-number {
+      font-weight: bold;
+      color: var(--text-muted);
+    }
+    
+    .rank-1 { color: #FFD700; }
+    .rank-2 { color: #C0C0C0; }
+    .rank-3 { color: #CD7F32; }
+
+    .user-cell {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .user-cell img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="container">
+      <div class="logo">
+        <a href="/">🧠 PersonaSnap</a>
+      </div>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/index.html#quizzes">Quizzes</a>
+        <a href="/leaderboard.html" class="text-primary">Leaderboard</a>
+        <a href="/dashboard.html">Dashboard</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container" style="padding-top: 3rem; padding-bottom: 5rem;">
+    <h1 class="section-title animate-fade-up">Global Leaderboard</h1>
+    
+    <div class="tabs animate-fade-up" style="animation-delay: 0.1s;">
+      <button class="tab-btn active">All Time</button>
+      <button class="tab-btn">This Week</button>
+      <button class="tab-btn">By Category</button>
+    </div>
+
+    <!-- Podium -->
+    <div class="podium-section animate-fade-up" style="animation-delay: 0.2s;">
+      
+      <!-- 2nd Place -->
+      <div class="podium-item place-2">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alex" class="podium-avatar">
+        <div class="podium-name">AlexBrain</div>
+        <div class="podium-xp">14,200 XP</div>
+        <div class="podium-block">2</div>
+      </div>
+
+      <!-- 1st Place -->
+      <div class="podium-item place-1">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah" class="podium-avatar">
+        <div class="podium-name">SarahGenius</div>
+        <div class="podium-xp">18,500 XP</div>
+        <div class="podium-block">1</div>
+      </div>
+
+      <!-- 3rd Place -->
+      <div class="podium-item place-3">
+        <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mike" class="podium-avatar">
+        <div class="podium-name">MikeLogic</div>
+        <div class="podium-xp">12,100 XP</div>
+        <div class="podium-block">3</div>
+      </div>
+
+    </div>
+
+    <!-- Table -->
+    <div class="glass-card animate-fade-up" style="padding: 1rem 2rem 2rem; animation-delay: 0.3s;">
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>User</th>
+            <th>Level</th>
+            <th>XP</th>
+            <th>Quizzes</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="rank-number rank-1">#1</td>
+            <td>
+              <div class="user-cell">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Sarah">
+                <span>SarahGenius</span>
+              </div>
+            </td>
+            <td>👑 Legendary</td>
+            <td style="color: var(--gold); font-weight: bold;">18,500</td>
+            <td>142</td>
+          </tr>
+          <tr>
+            <td class="rank-number rank-2">#2</td>
+            <td>
+              <div class="user-cell">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Alex">
+                <span>AlexBrain</span>
+              </div>
+            </td>
+            <td>👑 Legendary</td>
+            <td style="color: var(--gold); font-weight: bold;">14,200</td>
+            <td>110</td>
+          </tr>
+          <tr>
+            <td class="rank-number rank-3">#3</td>
+            <td>
+              <div class="user-cell">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mike">
+                <span>MikeLogic</span>
+              </div>
+            </td>
+            <td>💎 Diamond</td>
+            <td style="color: var(--gold); font-weight: bold;">12,100</td>
+            <td>95</td>
+          </tr>
+          <tr>
+            <td class="rank-number">#4</td>
+            <td>
+              <div class="user-cell">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Emma">
+                <span>EmmaPuzzles</span>
+              </div>
+            </td>
+            <td>💎 Diamond</td>
+            <td style="color: var(--gold); font-weight: bold;">9,800</td>
+            <td>80</td>
+          </tr>
+          <!-- Mock Current User -->
+          <tr class="current-user">
+            <td class="rank-number">#234</td>
+            <td>
+              <div class="user-cell">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Guest" id="lb-avatar">
+                <span id="lb-name">You</span>
+              </div>
+            </td>
+            <td id="lb-level">🥉 Bronze</td>
+            <td style="color: var(--gold); font-weight: bold;" id="lb-xp">0</td>
+            <td>1</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+  <script>
+    const mockUser = JSON.parse(localStorage.getItem('mockUser'));
+    const mockXp = parseInt(localStorage.getItem('mockXp') || 0);
+    
+    if (mockUser) {
+      document.getElementById('lb-avatar').src = mockUser.photoURL;
+      document.getElementById('lb-name').textContent = mockUser.displayName + " (You)";
+    }
+    document.getElementById('lb-xp').textContent = mockXp.toLocaleString();
+    
+    function getLevel(xp) {
+      if (xp >= 7000) return '👑 Legendary';
+      if (xp >= 3500) return '💎 Diamond';
+      if (xp >= 1500) return '🥇 Gold';
+      if (xp >= 500) return '🥈 Silver';
+      return '🥉 Bronze';
+    }
+    document.getElementById('lb-level').textContent = getLevel(mockXp);
+  </script>
+</body>
+</html>

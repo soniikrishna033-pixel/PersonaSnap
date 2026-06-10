@@ -1,0 +1,163 @@
+/* Neural Storm Layer 1: Aurora Background */
+.hero {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(
+    135deg,
+    #06060F 0%,
+    #1a0533 25%, 
+    #06060F 50%,
+    #001a33 75%,
+    #06060F 100%
+  );
+  background-size: 400% 400%;
+  animation: aurora 12s ease infinite;
+}
+
+@keyframes aurora {
+  0%   { background-position: 0% 50% }
+  50%  { background-position: 100% 50% }
+  100% { background-position: 0% 50% }
+}
+
+.aurora-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.orb-1 {
+  width: 600px;
+  height: 600px;
+  background: rgba(124, 58, 237, 0.4);
+  top: -100px;
+  left: -200px;
+  animation: driftOrb1 25s infinite alternate ease-in-out;
+}
+
+.orb-2 {
+  width: 400px;
+  height: 400px;
+  background: rgba(6, 182, 212, 0.4);
+  bottom: -150px;
+  right: -100px;
+  animation: driftOrb2 20s infinite alternate-reverse ease-in-out;
+}
+
+.orb-3 {
+  width: 300px;
+  height: 300px;
+  background: rgba(245, 158, 11, 0.2);
+  top: 50%;
+  right: 10%;
+  animation: driftOrb3 30s infinite alternate ease-in-out;
+}
+
+@keyframes driftOrb1 {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(200px, 150px) scale(1.2); }
+}
+
+@keyframes driftOrb2 {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-150px, -200px) scale(1.1); }
+}
+
+@keyframes driftOrb3 {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-100px, -50px) scale(0.9); }
+}
+
+/* Layer 2: Three.js Canvas Container */
+#neural-canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: auto; /* Required for mouse interactions */
+}
+
+#neural-canvas-container canvas {
+  display: block;
+}
+
+/* Override existing particles-bg in index.html to not interfere */
+.particles-bg {
+  display: none !important;
+}
+
+/* Layer 3: Floating Symbols */
+.floating-symbol {
+  position: absolute;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  user-select: none;
+  animation: floatSymbol linear forwards;
+}
+
+@keyframes floatSymbol {
+  0% {
+    transform: translateY(110vh) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: var(--max-opacity);
+  }
+  90% {
+    opacity: var(--max-opacity);
+  }
+  100% {
+    transform: translateY(-10vh) translateX(var(--drift-x));
+    opacity: 0;
+  }
+}
+
+/* Click Ripple Effect */
+.neural-ripple {
+  position: absolute;
+  border: 2px solid rgba(124, 58, 237, 0.6);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 3;
+  animation: neuralRipple 1s ease-out forwards;
+}
+
+@keyframes neuralRipple {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+  100% {
+    width: 400px;
+    height: 400px;
+    opacity: 0;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* Pulse glow for active particles (rendered via Three.js but we add a CSS glow overlay) */
+.neural-pulse-glow {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: #7C3AED;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 2;
+  box-shadow: 0 0 12px #7C3AED, 0 0 24px #7C3AED80;
+  animation: pulseGlow 0.5s ease-out forwards;
+}
+
+@keyframes pulseGlow {
+  0% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(3); opacity: 0; }
+}
+

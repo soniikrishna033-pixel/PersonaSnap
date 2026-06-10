@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Result – PersonaSnap</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/result.css">
+  <link rel="stylesheet" href="/css/snap.css">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="container">
+      <div class="logo">
+        <a href="/">🧠 PersonaSnap</a>
+      </div>
+      <div class="nav-right">
+        <button class="btn-primary" onclick="window.location.href='/dashboard.html'">Dashboard</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container result-header">
+    <div class="score-ring-container animate-fade-up">
+      <svg class="score-ring" viewBox="0 0 200 200">
+        <circle class="score-ring-bg" cx="100" cy="100" r="90"></circle>
+        <circle class="score-ring-fill" id="score-ring" cx="100" cy="100" r="90"></circle>
+      </svg>
+      <div class="score-text"><span id="score-number">0</span>%</div>
+    </div>
+    <p class="text-muted animate-fade-up" style="animation-delay: 0.2s;" id="score-comparison">You scored better than 85% of users</p>
+  </div>
+
+  <div class="glass-card result-card animate-fade-up" style="animation-delay: 0.3s;">
+    <h1 class="result-title" id="result-title">Calculating...</h1>
+    <p class="result-desc" id="result-desc">Your mind is being analyzed.</p>
+    
+    <div class="traits-list" id="traits-list">
+      <!-- Trait badges injected here -->
+    </div>
+
+    <div class="xp-breakdown">
+      <h3 style="margin-bottom: 1rem;">XP Breakdown</h3>
+      <div class="xp-row">
+        <span>Base Score XP</span>
+        <span id="xp-base">+0</span>
+      </div>
+      <div class="xp-row">
+        <span>Speed Bonus</span>
+        <span>+0</span>
+      </div>
+      <div class="xp-row">
+        <span>Streak Bonus</span>
+        <span>+0</span>
+      </div>
+      <div class="xp-row total">
+        <span>Total Earned</span>
+        <span id="xp-total">+0 XP</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Personal Growth Plan -->
+  <div class="glass-card result-card animate-fade-up" style="animation-delay: 0.4s; background: rgba(124, 58, 237, 0.05); border-color: var(--primary);">
+    <h2 style="color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 10px;">
+      <span style="font-size: 2rem;">📈</span> Your Personal Growth Plan
+    </h2>
+    <p style="margin-bottom: 1.5rem; font-size: 1.1rem;" id="growth-desc">Understanding your result is the first step.</p>
+    
+    <div style="background: rgba(0,0,0,0.3); padding: 1.5rem; border-radius: 12px; margin-bottom: 2rem;">
+      <h4 style="color: var(--cyan); margin-bottom: 0.5rem; font-family: var(--font-heading); text-transform: uppercase; letter-spacing: 1px;">#1 Thing to Work On</h4>
+      <p id="growth-focus" style="font-size: 1.1rem; color: white;">Loading focus area...</p>
+    </div>
+
+    <button class="btn-primary" id="btn-growth-guide" style="width: 100%; font-size: 1.1rem; padding: 15px;" onclick="">Read Your Personalized Guide &rarr;</button>
+  </div>
+
+  <!-- Share Section -->
+  <div class="share-section animate-fade-up" style="animation-delay: 0.5s;">
+    <h2 style="margin-bottom: 1.5rem;">Share Your Result</h2>
+    
+    <!-- This is the element we will convert to image -->
+    <div class="share-card-container" id="share-card">
+      <div style="font-family: var(--font-heading); font-weight: 700; color: var(--text-muted); margin-bottom: 1rem;">
+        ✨ PersonaSnap
+      </div>
+      <h2 style="color: var(--primary); font-size: 2rem; margin-bottom: 0.5rem;" id="share-title">Result</h2>
+      <p style="color: var(--text-main); font-size: 1.1rem; margin-bottom: 1.5rem; font-style: italic;" id="share-desc">"Description here"</p>
+      
+      <div style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; display: flex; justify-content: space-between;">
+        <div>
+          <div style="font-size: 0.8rem; color: var(--text-muted);">Score</div>
+          <div style="font-weight: bold; font-size: 1.2rem;" id="share-score">0%</div>
+        </div>
+        <div>
+          <div style="font-size: 0.8rem; color: var(--text-muted);">Level</div>
+          <div style="font-weight: bold; font-size: 1.2rem;" id="share-level">Bronze 🥉</div>
+        </div>
+        <div>
+          <div style="font-size: 0.8rem; color: var(--text-muted);">Top</div>
+          <div style="font-weight: bold; font-size: 1.2rem;">8%</div>
+        </div>
+      </div>
+      
+      <div style="margin-top: 1.5rem; font-size: 0.9rem; color: var(--text-muted); text-align: center;">
+        personasnap.com — What's YOUR result? 👆
+      </div>
+    </div>
+
+    <div class="share-buttons">
+      <button class="btn-share" id="btn-download">📸 Save Image</button>
+      <button class="btn-share" id="btn-twitter" style="background: #1DA1F2;">🐦 Twitter</button>
+      <button class="btn-share" id="btn-whatsapp" style="background: #25D366;">💬 WhatsApp</button>
+    </div>
+    
+    <div style="margin-top: 3rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+      <button class="btn-primary" onclick="window.location.href='/'">Try Another Quiz</button>
+      <button class="btn-primary" style="background: rgba(255,255,255,0.1);" onclick="window.location.href='/leaderboard.html'">Leaderboard 🏆</button>
+    </div>
+  </div>
+
+  <!-- Level Up Overlay -->
+  <div class="level-up-overlay" id="level-up-overlay">
+    <div class="level-up-title">LEVEL UP! 🎉</div>
+    <div class="level-badge-large" id="level-badge">🥇</div>
+    <h2 style="font-size: 2rem; margin-bottom: 1rem;" id="level-name">Gold Rank Achieved</h2>
+    <button class="btn-primary" onclick="document.getElementById('level-up-overlay').classList.remove('active')">Awesome!</button>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
+  
+  <script type="module">
+    import { quizzes } from '/js/quizzes.js';
+    import { generateShareImage, downloadImage, shareToPlatform } from '/js/share.js';
+    import { db, auth } from '/js/firebase.js';
+
+    // Parse Result
+    const lastResultStr = localStorage.getItem('lastResult');
+    if (!lastResultStr) {
+      window.location.href = '/';
+    }
+    const result = JSON.parse(lastResultStr);
+    const quiz = quizzes.find(q => q.id === result.quizId);
+    
+    const percentage = Math.round((result.score / result.total) * 100);
+    
+    // UI Elements
+    document.getElementById('score-number').textContent = percentage;
+    const ring = document.getElementById('score-ring');
+    const offset = 565.48 - (565.48 * percentage) / 100;
+    setTimeout(() => { ring.style.strokeDashoffset = offset; }, 500);
+
+    // Specific result logic
+    let resTitle = `${percentage}% - Well Done!`;
+    let resDesc = "You've completed the quiz.";
+    let trait = "Smart";
+
+    if (quiz.results) {
+      // Find the most frequent answer for personality
+      const answerCounts = {};
+      let maxAns = result.answers[0];
+      let maxCount = 0;
+      for (let ans of result.answers) {
+        answerCounts[ans] = (answerCounts[ans] || 0) + 1;
+        if (answerCounts[ans] > maxCount) {
+          maxCount = answerCounts[ans];
+          maxAns = ans;
+        }
+      }
+      if (quiz.results[maxAns]) {
+        resTitle = quiz.results[maxAns].title;
+        resDesc = quiz.results[maxAns].desc;
+        trait = quiz.results[maxAns].trait;
+      }
+    } else {
+      if (percentage === 100) {
+        resTitle = "Perfect Score! 💯";
+        resDesc = "Flawless execution. Your mind is sharper than a tack.";
+      } else if (percentage >= 80) {
+        resTitle = "Excellent! 🔥";
+        resDesc = "You did incredibly well. Keep it up!";
+      } else if (percentage >= 50) {
+        resTitle = "Not Bad! 👍";
+        resDesc = "A solid effort, but there's room for improvement.";
+      } else {
+        resTitle = "Better luck next time 😅";
+        resDesc = "That was tough! Give it another try to boost your score.";
+      }
+    }
+
+    document.getElementById('result-title').textContent = resTitle;
+    document.getElementById('result-desc').textContent = resDesc;
+    
+    const traitsList = document.getElementById('traits-list');
+    const traitBadge = document.createElement('div');
+    traitBadge.className = 'trait-badge';
+    traitBadge.textContent = trait;
+    traitsList.appendChild(traitBadge);
+
+    document.getElementById('xp-base').textContent = `+${result.xpEarned}`;
+    document.getElementById('xp-total').textContent = `+${result.xpEarned} XP`;
+
+    // Populate Share Card
+    document.getElementById('share-title').textContent = resTitle;
+    document.getElementById('share-desc').textContent = `"${resDesc}"`;
+    document.getElementById('share-score').textContent = `${percentage}%`;
+
+    // Add XP to user mock
+    let currentXp = parseInt(localStorage.getItem('mockXp') || 0);
+    const oldLevel = getLevel(currentXp);
+    currentXp += result.xpEarned;
+    localStorage.setItem('mockXp', currentXp);
+    const newLevel = getLevel(currentXp);
+    
+    document.getElementById('share-level').textContent = newLevel.name + ' ' + newLevel.emoji;
+
+    // Check Level up
+    if (newLevel.name !== oldLevel.name) {
+      setTimeout(() => {
+        document.getElementById('level-name').textContent = `${newLevel.name} Rank Achieved`;
+        document.getElementById('level-badge').textContent = newLevel.emoji;
+        document.getElementById('level-up-overlay').classList.add('active');
+        confetti({ particleCount: 200, spread: 100, origin: { y: 0.6 } });
+        // Notify Snap mascot
+        document.dispatchEvent(new CustomEvent('personasnap:levelup', {
+          detail: { oldLevel: oldLevel.name, newLevel: newLevel.name }
+        }));
+      }, 1500);
+    } else {
+      // Normal confetti on load
+      setTimeout(() => {
+        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+      }, 500);
+    }
+
+    // Share buttons
+    const shareText = `I scored ${percentage}% on "${quiz.title}"! Take the test on PersonaSnap!`;
+    const shareUrl = "https://personasnap.com";
+
+    document.getElementById('btn-download').addEventListener('click', async () => {
+      const btn = document.getElementById('btn-download');
+      btn.textContent = "Generating...";
+      const dataUrl = await generateShareImage('share-card');
+      if (dataUrl) {
+        downloadImage(dataUrl, `personasnap-${quiz.id}-result.png`);
+      }
+      btn.textContent = "📸 Save Image";
+    });
+
+    document.getElementById('btn-twitter').addEventListener('click', () => shareToPlatform('twitter', shareText, shareUrl));
+    document.getElementById('btn-whatsapp').addEventListener('click', () => shareToPlatform('whatsapp', shareText, shareUrl));
+
+    // Growth Plan Logic
+    let blogUrl = '/blog/why-youre-anxiously-attached.html';
+    let focusArea = 'Building self-worth independent of others.';
+    
+    if (quiz.id === 'red-flag' || trait === 'Major red flag' || trait === 'Run.') {
+      blogUrl = '/blog/how-to-stop-being-a-red-flag.html';
+      focusArea = 'Identifying and unlearning toxic relationship behaviors.';
+    } else if (quiz.id === 'attachment-style' && (trait === 'Anxious' || resTitle.toLowerCase().includes('anxious'))) {
+      blogUrl = '/blog/why-youre-anxiously-attached.html';
+      focusArea = 'Learning to self-soothe instead of seeking constant reassurance.';
+    } else if (quiz.id === 'attachment-style' && trait === 'Avoidant') {
+      blogUrl = '/blog/build-secure-relationships.html';
+      focusArea = 'Opening up and allowing emotional vulnerability.';
+    } else if (quiz.id === 'overthinker') {
+      blogUrl = '/blog/science-behind-overthinking.html';
+      focusArea = 'Interrupting negative thought spirals with mindfulness.';
+    } else if (quiz.id === 'love-language') {
+      blogUrl = '/blog/love-language-childhood.html';
+      focusArea = 'Understanding how your past shapes your current needs.';
+    } else if (quiz.category === 'IQ & Logic' && percentage < 70) {
+      blogUrl = '/blog/train-your-brain-boost-iq.html';
+      focusArea = 'Practicing daily logic exercises to improve fluid intelligence.';
+    } else if (quiz.category === 'IQ & Logic' && percentage >= 70) {
+      blogUrl = '/quiz.html?id=logic-puzzle';
+      document.getElementById('btn-growth-guide').textContent = 'Take the Master Logic Puzzle 🔥';
+      focusArea = 'Pushing your limits with complex multi-step reasoning.';
+    } else if (percentage < 50) {
+      blogUrl = '/blog/self-awareness-life-skill.html';
+      focusArea = 'Developing deeper self-awareness and accountability.';
+    }
+
+    document.getElementById('growth-focus').textContent = focusArea;
+    document.getElementById('btn-growth-guide').onclick = () => window.location.href = blogUrl;
+
+    function getLevel(xp) {
+      if (xp >= 7000) return { name: 'Legendary', emoji: '👑' };
+      if (xp >= 3500) return { name: 'Diamond', emoji: '💎' };
+      if (xp >= 1500) return { name: 'Gold', emoji: '🥇' };
+      if (xp >= 500) return { name: 'Silver', emoji: '🥈' };
+      return { name: 'Bronze', emoji: '🥉' };
+    }
+
+    // Adsterra / Monetag Placeholders
+    // Popunder fires once
+    if (!sessionStorage.getItem('popunderFired')) {
+      // Simulate Monetag popunder setup
+      sessionStorage.setItem('popunderFired', 'true');
+      console.log("Monetag popunder triggered");
+    }
+  </script>
+  <script src="/js/snap.js"></script>
+</body>
+</html>

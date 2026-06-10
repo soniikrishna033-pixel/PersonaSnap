@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us – PersonaSnap</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <style>
+    .form-group { margin-bottom: 1.5rem; text-align: left; }
+    .form-control {
+      width: 100%;
+      padding: 1rem;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      color: white;
+      font-family: var(--font-body);
+    }
+    .form-control:focus { outline: none; border-color: var(--primary); }
+    .faq-item { margin-bottom: 1rem; text-align: left; }
+    .faq-q { font-weight: bold; color: var(--cyan); margin-bottom: 0.25rem; }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="container">
+      <div class="logo"><a href="/">🧠 PersonaSnap</a></div>
+      <div class="nav-links"><a href="/">Home</a></div>
+    </div>
+  </nav>
+
+  <div class="container" style="padding: 4rem 20px; max-width: 800px; text-align: center;">
+    <h1 class="section-title">Contact Us</h1>
+    <div class="glass-card" style="padding: 3rem; margin-bottom: 3rem;">
+      <p style="margin-bottom: 2rem;">Reach us at: <strong>hello@personasnap.com</strong><br><span class="text-muted">Response time: within 48 hours</span></p>
+      <form onsubmit="event.preventDefault(); alert('Message Sent!');">
+        <div class="form-group"><input type="text" class="form-control" placeholder="Your Name" required></div>
+        <div class="form-group"><input type="email" class="form-control" placeholder="Your Email" required></div>
+        <div class="form-group"><textarea class="form-control" rows="5" placeholder="Your Message" required></textarea></div>
+        <button type="submit" class="btn-primary" style="width: 100%;">Send Message</button>
+      </form>
+    </div>
+
+    <h2 class="section-title" style="margin-bottom: 2rem;">FAQ</h2>
+    <div class="glass-card" style="padding: 2rem;">
+      <div class="faq-item"><div class="faq-q">Q: Are results accurate?</div><div class="text-muted">A: They are based on general psychological frameworks, but are meant for entertainment.</div></div>
+      <div class="faq-item"><div class="faq-q">Q: How do I delete my account?</div><div class="text-muted">A: Email us from your registered address requesting deletion.</div></div>
+      <div class="faq-item"><div class="faq-q">Q: Can I suggest a quiz?</div><div class="text-muted">A: Yes! Use the contact form above.</div></div>
+      <div class="faq-item"><div class="faq-q">Q: Why do I see ads?</div><div class="text-muted">A: Ads help us keep the platform free. We try to keep them unobtrusive.</div></div>
+    </div>
+  </div>
+</body>
+</html>

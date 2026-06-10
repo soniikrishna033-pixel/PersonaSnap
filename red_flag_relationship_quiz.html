@@ -1,0 +1,344 @@
+
+<h2 class="sr-only">Red flag or green flag? 30-question relationship personality quiz</h2>
+
+<div id="app" style="max-width:580px;margin:0 auto;padding:1.5rem 0;">
+
+<div id="scr-start">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;">
+    <div style="width:48px;height:48px;border-radius:50%;background:var(--color-background-danger);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+      <i class="ti ti-flag-2" style="font-size:22px;color:var(--color-text-danger);" aria-hidden="true"></i>
+    </div>
+    <div>
+      <p style="margin:0;font-size:11px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.08em;">Relationship check</p>
+      <h2 style="margin:0;font-size:20px;font-weight:500;line-height:1.2;">Red flag or green flag?</h2>
+    </div>
+  </div>
+  <div style="background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1.5rem;">
+    <p style="margin:0 0 1rem;font-size:15px;line-height:1.6;">30 real-world scenarios about your partner's behavior. Answer based on what they <em>actually</em> do — not what you hope they'd do.</p>
+    <div style="display:flex;gap:20px;font-size:13px;color:var(--color-text-secondary);">
+      <span><i class="ti ti-list-check" style="font-size:14px;vertical-align:-2px;margin-right:4px;" aria-hidden="true"></i>30 questions</span>
+      <span><i class="ti ti-clock" style="font-size:14px;vertical-align:-2px;margin-right:4px;" aria-hidden="true"></i>~3 minutes</span>
+      <span><i class="ti ti-shield-check" style="font-size:14px;vertical-align:-2px;margin-right:4px;" aria-hidden="true"></i>Be honest</span>
+    </div>
+  </div>
+  <button onclick="startQuiz()" style="width:100%;padding:13px;font-size:15px;font-weight:500;">Start quiz <i class="ti ti-arrow-right" style="font-size:14px;vertical-align:-2px;" aria-hidden="true"></i></button>
+</div>
+
+<div id="scr-q" style="display:none;">
+  <div style="display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;">
+    <div style="flex:1;height:5px;background:var(--color-border-tertiary);border-radius:3px;overflow:hidden;">
+      <div id="prog" style="height:100%;background:var(--color-text-danger);width:0%;transition:width .4s ease;"></div>
+    </div>
+    <span id="qnum" style="font-size:12px;color:var(--color-text-secondary);white-space:nowrap;min-width:40px;text-align:right;">1 / 30</span>
+  </div>
+  <div style="background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem 1.5rem;margin-bottom:1rem;">
+    <p id="qcat" style="margin:0 0 6px;font-size:11px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.07em;"></p>
+    <p id="qtext" style="margin:0;font-size:16px;font-weight:500;line-height:1.55;color:var(--color-text-primary);"></p>
+  </div>
+  <div id="opts" style="display:flex;flex-direction:column;gap:8px;margin-bottom:1.25rem;"></div>
+  <button id="nbtn" onclick="nextQ()" disabled style="width:100%;padding:12px;font-size:15px;opacity:.35;cursor:not-allowed;">Next <i class="ti ti-arrow-right" style="font-size:14px;vertical-align:-2px;" aria-hidden="true"></i></button>
+</div>
+
+<div id="scr-result" style="display:none;">
+  <div style="text-align:center;margin-bottom:1.75rem;">
+    <div id="ricon" style="display:inline-flex;align-items:center;justify-content:center;width:72px;height:72px;border-radius:50%;margin-bottom:1rem;">
+      <i id="riconi" class="ti ti-flag-2" style="font-size:30px;" aria-hidden="true"></i>
+    </div>
+    <br>
+    <span id="rbadge" style="display:inline-block;padding:4px 16px;border-radius:20px;font-size:13px;font-weight:500;margin-bottom:1rem;"></span>
+    <h3 id="rtitle" style="font-size:21px;font-weight:500;margin:0 0 .75rem;"></h3>
+    <p id="rdesc" style="color:var(--color-text-secondary);font-size:15px;margin:0 auto;max-width:460px;line-height:1.7;"></p>
+  </div>
+  <div style="background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1.25rem;margin-bottom:1rem;">
+    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--color-text-secondary);margin-bottom:8px;">
+      <span><i class="ti ti-heart" style="font-size:12px;vertical-align:-1px;color:var(--color-text-success);margin-right:3px;" aria-hidden="true"></i>green flag</span>
+      <span id="slabel" style="font-weight:500;color:var(--color-text-primary);"></span>
+      <span>red flag <i class="ti ti-flag" style="font-size:12px;vertical-align:-1px;color:var(--color-text-danger);margin-left:3px;" aria-hidden="true"></i></span>
+    </div>
+    <div style="height:10px;background:var(--color-border-tertiary);border-radius:5px;overflow:hidden;">
+      <div id="rmeter" style="height:100%;border-radius:5px;width:0%;transition:width 1.2s cubic-bezier(.25,.46,.45,.94);"></div>
+    </div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1.5rem;">
+    <div style="background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:1rem;text-align:center;">
+      <div id="sscore" style="font-size:28px;font-weight:500;"></div>
+      <div style="font-size:12px;color:var(--color-text-secondary);margin-top:2px;">points out of 90</div>
+    </div>
+    <div style="background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:1rem;text-align:center;">
+      <div id="spct" style="font-size:28px;font-weight:500;"></div>
+      <div style="font-size:12px;color:var(--color-text-secondary);margin-top:2px;">red flag intensity</div>
+    </div>
+  </div>
+  <button onclick="restart()" style="width:100%;padding:12px;font-size:15px;"><i class="ti ti-refresh" style="font-size:14px;vertical-align:-2px;margin-right:4px;" aria-hidden="true"></i>Take it again</button>
+</div>
+
+</div>
+
+<script>
+const qs=[
+{cat:'jealousy',q:"You post a photo with a friend of the opposite gender. Your partner:",opts:[
+{t:"Likes it and maybe leaves a sweet comment",p:0},
+{t:"Doesn't react — no big deal",p:1},
+{t:'Texts "Who\'s that?" with zero context',p:2},
+{t:"Blows up demanding you take it down",p:3}
+]},
+{cat:'trust',q:"You cancel plans because you're genuinely sick. They:",opts:[
+{t:"Send sweet messages and tell you to rest up",p:0},
+{t:"Say okay but seem a little disappointed",p:1},
+{t:"Make you feel guilty about cancelling",p:2},
+{t:"Accuse you of lying and making excuses",p:3}
+]},
+{cat:'communication',q:"When you two have an argument, they:",opts:[
+{t:"Communicate calmly and try to understand your side",p:0},
+{t:"Need a little space but come back to talk it out",p:1},
+{t:"Give you the silent treatment for days",p:2},
+{t:"Say hurtful things and then blame you for starting it",p:3}
+]},
+{cat:'support',q:"You got a promotion at work. Their reaction:",opts:[
+{t:"Celebrates loudly and brags to everyone about you",p:0},
+{t:"Says congratulations and takes you out to celebrate",p:1},
+{t:"Says cool and changes the subject",p:2},
+{t:"Makes it about themselves or quietly downplays it",p:3}
+]},
+{cat:'personal space',q:"You're hanging out with your friends. They:",opts:[
+{t:'Trust you fully, maybe sends a sweet "have fun" text',p:0},
+{t:"Checks in once or twice — nothing unusual",p:1},
+{t:"Texts every 20 minutes asking what you're doing",p:2},
+{t:"Shows up uninvited or demands you come home early",p:3}
+]},
+{cat:'past relationships',q:"You mention an ex casually in conversation. They:",opts:[
+{t:"Listen without making it weird",p:0},
+{t:"Get a little quiet but move on",p:1},
+{t:"Get visibly upset and need hours of reassurance",p:2},
+{t:"Bring it up for weeks as ammunition in arguments",p:3}
+]},
+{cat:'trust',q:"Your phone dies during a night out. When you get home, they:",opts:[
+{t:"Are glad you had fun — jokes about the dead battery",p:0},
+{t:"Were a little worried but relieved you're safe",p:1},
+{t:"Were blowing up your socials trying to find you",p:2},
+{t:"Are furious and accuse you of ignoring them on purpose",p:3}
+]},
+{cat:'respect',q:"You disagree with their opinion on something. They:",opts:[
+{t:"Engage in a healthy debate and respect your view",p:0},
+{t:"Try harder to explain their side of things",p:1},
+{t:"Get annoyed that you just won't agree",p:2},
+{t:"Call you stupid or dismiss you without any discussion",p:3}
+]},
+{cat:'privacy',q:"When it comes to your phone and personal space:",opts:[
+{t:"They'd never touch it without permission",p:0},
+{t:"Once picked it up jokingly — you didn't mind",p:1},
+{t:'Sometimes "borrows" it and glances at messages',p:2},
+{t:"Goes through it regularly and gets angry at what they find",p:3}
+]},
+{cat:'family',q:"You spend time with your family instead of them. They:",opts:[
+{t:"Think it's sweet and ask how everyone is doing",p:0},
+{t:"Are completely fine with it",p:1},
+{t:"Pout a little but say nothing",p:2},
+{t:"Make you feel guilty, like you chose family over them",p:3}
+]},
+{cat:'friendships',q:"Your friends don't like your partner. They:",opts:[
+{t:"Respect your judgment and try to earn your friends' trust",p:0},
+{t:"Try to be friendlier — know it takes time",p:1},
+{t:"Claim your friends are jealous and don't want you happy",p:2},
+{t:"Try to isolate you from your friends entirely",p:3}
+]},
+{cat:'emotional support',q:"You need support after a really bad day. They:",opts:[
+{t:"Drop everything to listen and comfort you",p:0},
+{t:"Check in but don't always know what to say",p:1},
+{t:"Try, but quickly shift the focus to their own problems",p:2},
+{t:'Tell you you\'re being "too sensitive" or dramatic',p:3}
+]},
+{cat:'past relationships',q:"How do they talk about their exes?",opts:[
+{t:"Maturely — acknowledges things just didn't work out",p:0},
+{t:"Doesn't really bring them up",p:1},
+{t:"Occasionally bitter — hints the exes were always at fault",p:2},
+{t:'Every single ex is "crazy" or "the worst person ever"',p:3}
+]},
+{cat:'confidence',q:"You're dressed up and looking your best. They:",opts:[
+{t:"Hype you up without fail, every single time",p:0},
+{t:"Say you look nice",p:1},
+{t:"Barely notice or say nothing at all",p:2},
+{t:'Say you\'re "dressed too nice" and ask who you\'re trying to impress',p:3}
+]},
+{cat:'accountability',q:"When they make a mistake in the relationship, they:",opts:[
+{t:"Own it, apologize sincerely, and actually work on changing",p:0},
+{t:"Apologize but need a moment to recognize what went wrong",p:1},
+{t:'Apologize but always add a "but you also..."',p:2},
+{t:"Never apologize — you always end up saying sorry first",p:3}
+]},
+{cat:'boundaries',q:"You tell them you're uncomfortable with something they do. They:",opts:[
+{t:"Take it seriously and respect the boundary right away",p:0},
+{t:"Don't fully understand but genuinely try",p:1},
+{t:'Say "you\'re overreacting" but half-heartedly stop',p:2},
+{t:"Mock you for it or keep doing it anyway",p:3}
+]},
+{cat:'effort',q:"How often do they actively put effort into the relationship?",opts:[
+{t:"Consistently — plans dates, checks in, makes you feel valued",p:0},
+{t:"Most of the time, with occasional lazy phases",p:1},
+{t:"Only when they want something or after a fight",p:2},
+{t:"The bare minimum, and acts like that's enough",p:3}
+]},
+{cat:'envy',q:"You achieve something they haven't — a raise, better grades, a win. They:",opts:[
+{t:"Are your biggest cheerleader, zero resentment",p:0},
+{t:"Are happy for you, maybe just a little competitive",p:1},
+{t:"Make passive-aggressive comments about it",p:2},
+{t:"Actively try to undermine or downplay what you did",p:3}
+]},
+{cat:'jealousy',q:"You're chatting with someone attractive at a party. They:",opts:[
+{t:"Trust you completely and give you space to socialize",p:0},
+{t:"Come over, say hi, and casually join the conversation",p:1},
+{t:"Give you a look across the room and bring it up later",p:2},
+{t:"Make a scene there, or punish you with silence all night",p:3}
+]},
+{cat:'reliability',q:"They make a promise and then cancel last minute. How often?",opts:[
+{t:"Rarely — and they always make it up properly",p:0},
+{t:"Occasionally — life happens and they're genuinely sorry",p:1},
+{t:"More often than not, with a new excuse each time",p:2},
+{t:"All the time — you've stopped expecting follow-through",p:3}
+]},
+{cat:'respect',q:"How do they talk about you to their friends?",opts:[
+{t:"With genuine pride and affection",p:0},
+{t:"Normally — mentions you but keeps it private",p:1},
+{t:"You've heard they complain about you to others",p:2},
+{t:"Regularly talks badly about you behind your back",p:3}
+]},
+{cat:'encouragement',q:"You want to try a new hobby, food, or travel destination. They:",opts:[
+{t:"Get excited and either join in or fully encourage you",p:0},
+{t:"Support you even if it's not their thing",p:1},
+{t:"Are indifferent or mildly dismissive",p:2},
+{t:"Discourage you or make you feel silly for wanting it",p:3}
+]},
+{cat:'accountability',q:"After a fight, who usually apologizes first?",opts:[
+{t:"Whoever was actually wrong — maturely and genuinely",p:0},
+{t:"Whoever calms down first — it's fairly balanced",p:1},
+{t:"Always you, even when it clearly wasn't your fault",p:2},
+{t:"You, every time, while they wait or guilt-trip you",p:3}
+]},
+{cat:'boundaries',q:"You set a clear personal boundary. They:",opts:[
+{t:"Respect it immediately, no questions asked",p:0},
+{t:"Respect it but need a small explanation",p:1},
+{t:"Push back but eventually back down",p:2},
+{t:"Ignore it or use it against you later in arguments",p:3}
+]},
+{cat:'emotional safety',q:"How do they handle your insecurities?",opts:[
+{t:"Reassure you warmly and never use them against you",p:0},
+{t:"Try to help — not always perfectly, but sincerely",p:1},
+{t:"Get visibly tired and annoyed when you bring them up",p:2},
+{t:"Use your insecurities as weapons in arguments",p:3}
+]},
+{cat:'social media',q:"Their behavior on social media around your relationship:",opts:[
+{t:"Natural — acknowledges you without being obsessive",p:0},
+{t:"Private person but acknowledges you when relevant",p:1},
+{t:"Rarely posts you — you're basically invisible to followers",p:2},
+{t:"You're hidden, but they're active and flirty with others",p:3}
+]},
+{cat:'support',q:"You're going through a genuinely hard time. They:",opts:[
+{t:"Show up for you — physically or emotionally — without being asked",p:0},
+{t:"Check in and do what they can",p:1},
+{t:"Get overwhelmed and slowly pull back",p:2},
+{t:"Make your hard time about them, or disappear entirely",p:3}
+]},
+{cat:'character',q:"How do they treat strangers and service staff — waiters, cashiers?",opts:[
+{t:"With kindness and basic human decency",p:0},
+{t:"Normal and polite",p:1},
+{t:"Sometimes rude or dismissive to people serving them",p:2},
+{t:"Regularly disrespects people they see as beneath them",p:3}
+]},
+{cat:'validation',q:"When you're genuinely excited or happy about something, they:",opts:[
+{t:"Match your energy and celebrate with you every time",p:0},
+{t:"Are genuinely happy for you",p:1},
+{t:"Are politely interested but barely engage",p:2},
+{t:"Downplay it or immediately one-up you with their own thing",p:3}
+]},
+{cat:'gut check',q:"Overall, how do you feel most of the time in this relationship?",opts:[
+{t:"Secure, loved, and genuinely at peace",p:0},
+{t:"Good overall, with normal ups and downs",p:1},
+{t:"Anxious, uncertain, walking on eggshells sometimes",p:2},
+{t:"Drained, confused, or like you're always doing something wrong",p:3}
+]}
+];
+
+const results=[
+{max:18,icon:'ti-heart',icbg:'var(--color-background-success)',icc:'var(--color-text-success)',bbg:'var(--color-background-success)',bc:'var(--color-text-success)',badge:'Total green flag',title:"They're a keeper",desc:"Barely any red flags across all 30 questions. Your partner shows healthy communication, genuine support, and real respect. This is rare — hold on tight and keep nurturing what you have."},
+{max:36,icon:'ti-circle-check',icbg:'var(--color-background-info)',icc:'var(--color-text-info)',bbg:'var(--color-background-info)',bc:'var(--color-text-info)',badge:'Mostly okay',title:"A few things to watch",desc:"No major alarm bells, but a handful of yellow flags came up. Every relationship has friction — what matters is how you both handle it. A calm, open conversation could go a long way."},
+{max:54,icon:'ti-alert-triangle',icbg:'var(--color-background-warning)',icc:'var(--color-text-warning)',bbg:'var(--color-background-warning)',bc:'var(--color-text-warning)',badge:'Caution zone',title:"Some patterns worth addressing",desc:"Real concerns showed up here — not just small quirks. Some of your answers suggest patterns of disrespect or poor communication. Have an honest talk and see if they're genuinely willing to grow."},
+{max:72,icon:'ti-flag-2',icbg:'var(--color-background-danger)',icc:'var(--color-text-danger)',bbg:'var(--color-background-danger)',bc:'var(--color-text-danger)',badge:'Major red flag',title:"Too many red flags to ignore",desc:"The pattern across these 30 scenarios is hard to overlook. A healthy relationship shouldn't feel like a constant battle. You deserve someone who lifts you up — not someone who drains you."},
+{max:90,icon:'ti-alert-octagon',icbg:'var(--color-background-danger)',icc:'var(--color-text-danger)',bbg:'var(--color-background-danger)',bc:'var(--color-text-danger)',badge:'Run.',title:"This is not okay",desc:"Almost every answer points to serious red flags — control, disrespect, emotional harm. These aren't quirks, they're patterns. You deserve far better. Please talk to someone you trust."}
+];
+
+let curr=0,total=0,chosen=null;
+
+function show(id){
+  ['scr-start','scr-q','scr-result'].forEach(s=>{
+    document.getElementById(s).style.display=s===id?'block':'none';
+  });
+}
+
+function startQuiz(){
+  curr=0;total=0;chosen=null;
+  show('scr-q');loadQ();
+}
+
+function loadQ(){
+  const q=qs[curr];
+  document.getElementById('qnum').textContent=(curr+1)+' / 30';
+  document.getElementById('prog').style.width=(curr/30*100)+'%';
+  document.getElementById('qcat').textContent=q.cat;
+  document.getElementById('qtext').textContent=q.q;
+  const c=document.getElementById('opts');
+  c.innerHTML='';
+  q.opts.forEach((o,i)=>{
+    const b=document.createElement('button');
+    b.style.cssText='width:100%;text-align:left;padding:11px 14px;font-size:14px;line-height:1.5;display:flex;align-items:flex-start;gap:10px;';
+    b.innerHTML='<span style="font-weight:500;font-size:12px;min-width:18px;padding-top:1px;opacity:.6;">'+String.fromCharCode(65+i)+'</span><span>'+o.t+'</span>';
+    b.onclick=()=>pick(o.p,b);
+    c.appendChild(b);
+  });
+  chosen=null;setNext(false);
+}
+
+function pick(pts,btn){
+  document.querySelectorAll('#opts button').forEach(b=>{
+    b.style.background='';b.style.borderColor='';b.style.color='';
+  });
+  btn.style.background='var(--color-background-info)';
+  btn.style.borderColor='var(--color-border-info)';
+  btn.style.color='var(--color-text-info)';
+  chosen=pts;setNext(true);
+}
+
+function setNext(on){
+  const b=document.getElementById('nbtn');
+  b.disabled=!on;b.style.opacity=on?'1':'.35';b.style.cursor=on?'pointer':'not-allowed';
+}
+
+function nextQ(){
+  if(chosen===null)return;
+  total+=chosen;curr++;
+  if(curr>=30)showResult();else loadQ();
+}
+
+function showResult(){
+  show('scr-result');
+  const pct=Math.round(total/90*100);
+  document.getElementById('slabel').textContent=total+' / 90 points';
+  document.getElementById('sscore').textContent=total;
+  document.getElementById('spct').textContent=pct+'%';
+  const r=results.find(x=>total<=x.max)||results[4];
+  const ic=document.getElementById('ricon');
+  ic.style.background=r.icbg;
+  const ii=document.getElementById('riconi');
+  ii.className='ti '+r.icon;ii.style.color=r.icc;
+  const b=document.getElementById('rbadge');
+  b.textContent=r.badge;b.style.background=r.bbg;b.style.color=r.bc;
+  document.getElementById('rtitle').textContent=r.title;
+  document.getElementById('rdesc').textContent=r.desc;
+  const m=document.getElementById('rmeter');
+  setTimeout(()=>{
+    m.style.width=pct+'%';
+    m.style.background=pct<=20?'var(--color-text-success)':pct<=45?'var(--color-text-warning)':'var(--color-text-danger)';
+  },200);
+}
+
+function restart(){startQuiz();}
+</script>

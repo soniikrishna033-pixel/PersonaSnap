@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PersonaSnap - What Does Your Mind Say About You?</title>
+  <meta name="description" content="Take highly engaging personality quizzes, IQ tests, and mental puzzles. Discover yourself and share your results on PersonaSnap.">
+  <meta property="og:title" content="PersonaSnap - What Does Your Mind Say About You?">
+  <meta property="og:image" content="/assets/og-image.jpg">
+  <link rel="canonical" href="https://personasnap.com/">
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/neural-storm.css">
+  <link rel="stylesheet" href="/css/snap.css">
+  <style>
+    /* Hero Specific Styles */
+    .hero {
+      position: relative;
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      overflow: hidden;
+      padding: 4rem 20px;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 10;
+      max-width: 800px;
+    }
+
+    .typewriter-text {
+      color: var(--primary);
+      border-right: 3px solid var(--primary);
+      animation: blink 0.75s step-end infinite;
+    }
+
+    @keyframes blink {
+      from, to { border-color: transparent }
+      50% { border-color: var(--primary); }
+    }
+
+    .hero h1 {
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero p {
+      font-size: 1.25rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+    }
+
+    .trust-badges {
+      margin-top: 3rem;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      flex-wrap: wrap;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    /* Floating Particles */
+    .particles-bg {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      background: radial-gradient(circle, rgba(124, 58, 237, 0.4) 0%, rgba(0,0,0,0) 70%);
+      border-radius: 50%;
+      animation: float 20s infinite linear;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) scale(0); opacity: 0; }
+      10% { opacity: 1; }
+      90% { opacity: 1; }
+      100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+    }
+
+    /* Category Grid */
+    .section-title {
+      text-align: center;
+      font-size: 2.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .categories-section {
+      padding: 5rem 0;
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .category-card {
+      padding: 2rem;
+      text-align: center;
+      transition: all var(--transition-normal);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .category-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(circle at center, var(--hover-color) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity var(--transition-normal);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .category-card:hover {
+      transform: scale(1.02);
+      border-color: var(--hover-color);
+    }
+
+    .category-card:hover::before {
+      opacity: 0.1;
+    }
+
+    .category-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .category-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .category-title {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .category-desc {
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .category-count {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-main);
+      opacity: 0.8;
+    }
+
+    /* Featured Quizzes */
+    .featured-section {
+      padding: 5rem 0;
+      background: rgba(124, 58, 237, 0.02);
+    }
+
+    .horizontal-scroll {
+      display: flex;
+      gap: 1.5rem;
+      overflow-x: auto;
+      padding: 1rem 0 2rem;
+      scroll-snap-type: x mandatory;
+    }
+
+    .quiz-card {
+      min-width: 300px;
+      flex: 0 0 300px;
+      padding: 1.5rem;
+      scroll-snap-align: start;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .quiz-emoji {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .quiz-tag {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .quiz-title {
+      font-size: 1.25rem;
+      margin-bottom: 1rem;
+      flex-grow: 1;
+    }
+
+    .quiz-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .xp-badge {
+      background: rgba(245, 158, 11, 0.2);
+      color: var(--gold);
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+
+    /* How It Works */
+    .steps-section {
+      padding: 5rem 0;
+    }
+
+    .steps-container {
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .step-item {
+      flex: 1;
+      min-width: 250px;
+      text-align: center;
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      font-weight: bold;
+      font-family: var(--font-heading);
+    }
+
+    /* Footer */
+    footer {
+      padding: 4rem 0 2rem;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      margin-top: 4rem;
+    }
+
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="container">
+      <div class="logo">
+        <span style="font-size: 1.8rem;">🧠</span> PersonaSnap
+      </div>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="#quizzes">Quizzes</a>
+        <a href="/leaderboard.html">Leaderboard</a>
+        <a href="/dashboard.html">Dashboard</a>
+      </div>
+      <div class="nav-right">
+        <div class="streak-counter" title="Current Streak">
+          🔥 <span id="nav-streak">0</span>
+        </div>
+        <div class="xp-badge" style="display:none;" id="nav-xp">0 XP</div>
+        <button class="btn-primary" id="btn-signin">Sign In</button>
+      </div>
+    </div>
+  </nav>
+
+  <section class="hero">
+    <div class="particles-bg" id="particles"></div>
+    <div class="hero-content animate-fade-up">
+      <h1>Discover <span class="typewriter-text" id="typewriter">yourself</span><span style="opacity: 0;">|</span>. Grow Every Day.</h1>
+      <p>Take engaging quizzes. Discover your hidden traits. Share your results with the world.</p>
+      <a href="#quizzes" class="btn-primary" style="display:inline-block; margin-top: 1rem; font-size: 1.1rem; padding: 14px 32px;">Explore Quizzes &rarr;</a>
+      
+      <div class="trust-badges">
+        <div class="stat-item">
+          <h3 style="color:var(--text-main); font-size: 1.5rem;"><span class="counter" data-target="5000000">0</span>+</h3>
+          <p>Quizzes Taken</p>
+        </div>
+        <div class="stat-item">
+          <h3 style="color:var(--text-main); font-size: 1.5rem;"><span class="counter" data-target="2000000">0</span>+</h3>
+          <p>Users</p>
+        </div>
+        <div class="stat-item">
+          <h3 style="color:var(--text-main); font-size: 1.5rem;">50+</h3>
+          <p>Unique Tests</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="categories-section container">
+    <h2 class="section-title animate-fade-up">Explore Categories</h2>
+    <div class="category-grid">
+      <!-- Generated by JS, but keeping static placeholders for fallback -->
+      <div class="glass-card category-card" style="--hover-color: #7C3AED;" onclick="window.location.href='#quizzes'">
+        <div class="category-content">
+          <div class="category-icon">🧠</div>
+          <h3 class="category-title">Personality</h3>
+          <p class="category-desc">Who are you really?</p>
+          <span class="category-count">5 quizzes</span>
+        </div>
+      </div>
+      <div class="glass-card category-card" style="--hover-color: #2563EB;">
+        <div class="category-content">
+          <div class="category-icon">⚡</div>
+          <h3 class="category-title">IQ & Logic</h3>
+          <p class="category-desc">How sharp is your mind?</p>
+          <span class="category-count">2 quizzes</span>
+        </div>
+      </div>
+      <div class="glass-card category-card" style="--hover-color: #059669;">
+        <div class="category-content">
+          <div class="category-icon">🔢</div>
+          <h3 class="category-title">Math Blitz</h3>
+          <p class="category-desc">Beat the clock</p>
+          <span class="category-count">1 quiz</span>
+        </div>
+      </div>
+      <div class="glass-card category-card" style="--hover-color: #D97706;">
+        <div class="category-content">
+          <div class="category-icon">🔤</div>
+          <h3 class="category-title">Spell Bee</h3>
+          <p class="category-desc">Spell it right</p>
+          <span class="category-count">1 quiz</span>
+        </div>
+      </div>
+      <div class="glass-card category-card" style="--hover-color: #DC2626;">
+        <div class="category-content">
+          <div class="category-icon">🧩</div>
+          <h3 class="category-title">Puzzles</h3>
+          <p class="category-desc">Can you crack it?</p>
+          <span class="category-count">1 quiz</span>
+        </div>
+      </div>
+      <div class="glass-card category-card" style="--hover-color: #0891B2;">
+        <div class="category-content">
+          <div class="category-icon">🌎</div>
+          <h3 class="category-title">Trivia</h3>
+          <p class="category-desc">How much do you know?</p>
+          <span class="category-count">Coming Soon</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="featured-section" id="quizzes">
+    <div class="container">
+      <h2 class="section-title animate-fade-up">Trending Quizzes</h2>
+      <div class="horizontal-scroll hide-scrollbar" id="featured-quizzes">
+        <!-- Will be populated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- Adsterra Native Ad Placeholder -->
+  <div class="container" style="text-align: center; margin: 2rem auto;">
+    <div style="background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.2); padding: 2rem; color: var(--text-muted);">
+      Adsterra Native Ad Placeholder
+    </div>
+  </div>
+
+  <!-- Growth Hub Section -->
+  <section class="featured-section" id="growth-hub" style="background: transparent;">
+    <div class="container">
+      <h2 class="section-title animate-fade-up">From the Growth Hub 📖</h2>
+      <div class="category-grid" id="latest-blogs">
+        <!-- Populated by JS -->
+      </div>
+      <div style="text-align: center; margin-top: 3rem;">
+        <button class="btn-primary" onclick="window.location.href='/blog/why-youre-anxiously-attached.html'" style="background: transparent; border: 1px solid var(--primary); color: var(--primary);">View All Articles</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section class="steps-section container">
+    <h2 class="section-title animate-fade-up">What Our Community Says 💬</h2>
+    <div class="category-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+      <div class="glass-card category-card animate-fade-up" style="text-align: left;">
+        <div style="color: var(--gold); font-size: 1.5rem; margin-bottom: 1rem;">★★★★★</div>
+        <p style="font-style: italic; margin-bottom: 1.5rem; font-size: 1.1rem; line-height: 1.6;">"I went from anxious to secure attachment in 2 months using PersonaSnap's guides!"</p>
+        <div style="font-weight: bold; color: var(--primary);">— Sarah K.</div>
+      </div>
+      <div class="glass-card category-card animate-fade-up" style="text-align: left; animation-delay: 0.1s;">
+        <div style="color: var(--gold); font-size: 1.5rem; margin-bottom: 1rem;">★★★★★</div>
+        <p style="font-style: italic; margin-bottom: 1.5rem; font-size: 1.1rem; line-height: 1.6;">"The red flag quiz literally changed how I communicate with my partner."</p>
+        <div style="font-weight: bold; color: var(--cyan);">— Marcus T.</div>
+      </div>
+      <div class="glass-card category-card animate-fade-up" style="text-align: left; animation-delay: 0.2s;">
+        <div style="color: var(--gold); font-size: 1.5rem; margin-bottom: 1rem;">★★★★★</div>
+        <p style="font-style: italic; margin-bottom: 1.5rem; font-size: 1.1rem; line-height: 1.6;">"I read a new article every morning. My confidence is insane now."</p>
+        <div style="font-weight: bold; color: var(--success);">— Priya M.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="steps-section container">
+    <h2 class="section-title animate-fade-up">How It Works</h2>
+    <div class="steps-container">
+      <div class="step-item animate-fade-up" style="animation-delay: 0.1s;">
+        <div class="step-number">1</div>
+        <h3>Choose a Quiz 🎯</h3>
+        <p class="text-muted" style="margin-top: 0.5rem;">Pick from our wide variety of tests tailored to your interests.</p>
+      </div>
+      <div class="step-item animate-fade-up" style="animation-delay: 0.2s;">
+        <div class="step-number">2</div>
+        <h3>Answer Questions ⚡</h3>
+        <p class="text-muted" style="margin-top: 0.5rem;">Engage with our interactive player and beat the clock.</p>
+      </div>
+      <div class="step-item animate-fade-up" style="animation-delay: 0.3s;">
+        <div class="step-number">3</div>
+        <h3>Share Your Result 📤</h3>
+        <p class="text-muted" style="margin-top: 0.5rem;">Get a beautiful shareable card and compare with friends.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="container">
+    <div class="footer-content">
+      <div>
+        <div class="logo">🧠 PersonaSnap</div>
+        <p class="text-muted" style="margin-top: 0.5rem;">Made with 🧠 for curious minds.</p>
+      </div>
+      <div class="footer-links text-muted">
+        <a href="/about.html">About</a>
+        <a href="/terms.html">Terms</a>
+        <a href="/privacy.html">Privacy</a>
+        <a href="/contact.html">Contact</a>
+      </div>
+    </div>
+    <div class="text-center text-muted" style="font-size: 0.85rem;">
+      &copy; 2026 PersonaSnap. All rights reserved.
+    </div>
+  </footer>
+
+  <script type="module" src="/js/firebase.js"></script>
+  <script type="module" src="/js/auth.js"></script>
+  <script type="module" src="/js/quizzes.js"></script>
+  <script type="module" src="/js/quizzes.js"></script>
+  <script type="module" src="/js/blogs.js"></script>
+  <script type="module">
+    import { quizzes } from '/js/quizzes.js';
+    import { blogs } from '/js/blogs.js';
+
+    // Typewriter effect
+    const words = ["yourself", "your potential", "your mind", "your future"];
+    let i = 0;
+    let timer;
+    const typewriter = document.getElementById('typewriter');
+    
+    function typingEffect() {
+      let word = words[i].split("");
+      var loopTyping = function() {
+        if (word.length > 0) {
+          typewriter.innerHTML += word.shift();
+        } else {
+          setTimeout(deletingEffect, 2000);
+          return false;
+        }
+        timer = setTimeout(loopTyping, 100);
+      };
+      loopTyping();
+    }
+
+    function deletingEffect() {
+      let word = words[i].split("");
+      var loopDeleting = function() {
+        if (word.length > 0) {
+          word.pop();
+          typewriter.innerHTML = word.join("");
+        } else {
+          i = (i + 1) % words.length;
+          setTimeout(typingEffect, 500);
+          return false;
+        }
+        timer = setTimeout(loopDeleting, 50);
+      };
+      loopDeleting();
+    }
+    
+    typewriter.innerHTML = "";
+    typingEffect();
+
+    // Init streak counter
+    const navStreak = document.getElementById('nav-streak');
+    if (navStreak) {
+      navStreak.textContent = localStorage.getItem('quizStreak') || '0';
+    }
+    // Init XP
+    const navXp = document.getElementById('nav-xp');
+    const mockXp = localStorage.getItem('mockXp');
+    if (navXp && mockXp && parseInt(mockXp) > 0) {
+      navXp.style.display = '';
+      navXp.textContent = mockXp + ' XP';
+    }
+
+    // Generate Particles
+    const particlesContainer = document.getElementById('particles');
+    for(let j=0; j<20; j++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      const size = Math.random() * 60 + 20;
+      p.style.width = size + 'px';
+      p.style.height = size + 'px';
+      p.style.left = Math.random() * 100 + '%';
+      p.style.animationDelay = (Math.random() * 20) + 's';
+      p.style.animationDuration = (Math.random() * 10 + 15) + 's';
+      particlesContainer.appendChild(p);
+    }
+
+    // Number Counter Animation
+    const counters = document.querySelectorAll('.counter');
+    const speed = 200;
+
+    const animateCounters = () => {
+      counters.forEach(counter => {
+        const target = +counter.getAttribute('data-target');
+        const count = +counter.innerText.replace(/,/g, '');
+        const inc = target / speed;
+        if (count < target) {
+          counter.innerText = Math.ceil(count + inc).toLocaleString();
+          setTimeout(animateCounters, 10);
+        } else {
+          counter.innerText = target.toLocaleString();
+        }
+      });
+    };
+    
+    // Intersection Observer for scroll animations
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate-fade-up');
+          if (entry.target.querySelector('.counter')) {
+            animateCounters();
+          }
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.section-title').forEach(el => {
+      el.classList.remove('animate-fade-up'); // reset for observer
+      observer.observe(el);
+    });
+    observer.observe(document.querySelector('.trust-badges'));
+
+    // Populate Featured Quizzes
+    const featuredContainer = document.getElementById('featured-quizzes');
+    const categoryColors = {
+      'Personality': '#7C3AED',
+      'IQ & Logic': '#2563EB',
+      'Math Blitz': '#059669',
+      'Spell Bee': '#D97706',
+      'Puzzle': '#DC2626'
+    };
+
+    quizzes.slice(0, 6).forEach(quiz => {
+      const card = document.createElement('div');
+      card.className = 'glass-card quiz-card';
+      const color = categoryColors[quiz.category] || '#7C3AED';
+      
+      card.innerHTML = `
+        <div class="quiz-emoji">${quiz.emoji}</div>
+        <div class="quiz-tag" style="background: ${color}20; color: ${color}">${quiz.category}</div>
+        <h3 class="quiz-title">${quiz.title}</h3>
+        <div class="quiz-meta">
+          <span>👥 ${Math.floor(Math.random() * 50 + 10)}k plays</span>
+          <span>⏱ ${quiz.timer ? quiz.timerText : 'No timer'}</span>
+        </div>
+        <div style="display:flex; justify-content: space-between; align-items:center;">
+          <span class="xp-badge">+${quiz.xp} XP</span>
+          <button class="btn-primary" style="padding: 8px 16px; font-size: 0.9rem;" onclick="window.location.href='/quiz.html?id=${quiz.id}'">Start &rarr;</button>
+        </div>
+      `;
+      featuredContainer.appendChild(card);
+    });
+
+    // Populate Latest Blogs
+    const blogsContainer = document.getElementById('latest-blogs');
+    if (blogsContainer && blogs) {
+      blogs.slice(0, 3).forEach(blog => {
+        const card = document.createElement('div');
+        card.className = 'glass-card category-card animate-fade-up';
+        card.style.textAlign = 'left';
+        card.onclick = () => window.location.href = blog.url;
+        card.innerHTML = `
+          <div style="font-size: 3rem; margin-bottom: 1rem;">${blog.emoji}</div>
+          <div style="background: rgba(124, 58, 237, 0.2); color: var(--primary); display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; margin-bottom: 1rem; text-transform: uppercase;">${blog.category}</div>
+          <h3 style="font-size: 1.25rem; margin-bottom: 1rem;">${blog.title}</h3>
+          <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem;">⏱️ ${blog.readTime} min read</p>
+          <div style="color: var(--cyan); font-weight: bold;">Read Now &rarr;</div>
+        `;
+        blogsContainer.appendChild(card);
+      });
+    }
+
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script type="module">
+    import { initNeuralStorm } from '/js/neural-storm.js';
+    initNeuralStorm();
+  </script>
+  <script src="/js/snap.js"></script>
+</body>
+</html>

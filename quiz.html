@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz – PersonaSnap</title>
+  <link rel="stylesheet" href="/css/main.css">
+  <link rel="stylesheet" href="/css/quiz.css">
+  <link rel="stylesheet" href="/css/snap.css">
+</head>
+<body style="background: var(--bg-color);">
+  <div class="container">
+    <div class="quiz-header">
+      <div id="quiz-title" style="font-family: var(--font-heading); font-size: 1.25rem;">Loading...</div>
+      <div id="quiz-timer" class="timer" style="display: none;">00:00</div>
+      <div id="quiz-xp" class="xp-badge">0 XP</div>
+      <button class="btn-primary" style="padding: 8px 16px; background: rgba(255,255,255,0.1); color: white;" onclick="confirmExit()">✕ Exit</button>
+    </div>
+
+    <div class="progress-container">
+      <div class="progress-text">
+        <span id="progress-count">Question 1 of X</span>
+      </div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progress-fill"></div>
+      </div>
+    </div>
+
+    <div class="glass-card question-card" id="question-card">
+      <div class="question-badge" id="question-badge">Q1</div>
+      <h2 class="question-text" id="question-text">Loading question...</h2>
+      <div class="options-grid" id="options-grid">
+        <!-- Options injected here -->
+      </div>
+    </div>
+  </div>
+
+  <div class="transition-overlay" id="transition-overlay">
+    <div class="brain-pulse">🧠</div>
+    <div class="transition-text">Reading your mind...</div>
+  </div>
+
+  <script type="module" src="/js/quiz-engine.js"></script>
+  <script>
+    function confirmExit() {
+      if(confirm("Are you sure you want to exit? Your progress will be lost.")) {
+        window.location.href = '/';
+      }
+    }
+  </script>
+  <script src="/js/snap.js"></script>
+</body>
+</html>
