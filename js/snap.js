@@ -81,17 +81,43 @@ class SnapMascot {
       muteBtn.textContent = this.muted ? '🔇' : '🔊';
     }.bind(this));
 
-    // Body
+    // Body as SVG
     this.body = document.createElement('div');
     this.body.className = 'snap-body';
+    
+    // Add SVG Body
+    this.body.innerHTML = `
+      <svg class="snap-svg-body" viewBox="0 0 100 100" width="100%" height="100%" style="position:absolute; top:0; left:0; z-index:0;">
+        <defs>
+          <linearGradient id="snap-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#A855F7"/>
+            <stop offset="100%" stop-color="#4C1D95"/>
+          </linearGradient>
+          <filter id="snap-glow" x="-20%" y="-20%" width="140%" height="140%">
+            <feGaussianBlur stdDeviation="5" result="blur"/>
+            <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+          </filter>
+        </defs>
+        <circle cx="50" cy="50" r="48" fill="url(#snap-grad)" filter="url(#snap-glow)"/>
+        <!-- 3D inner curves -->
+        <path d="M50 2 A 48 48 0 0 1 98 50 A 40 40 0 0 0 50 10 A 40 40 0 0 0 2 50 A 48 48 0 0 1 50 2 Z" fill="rgba(255,255,255,0.15)"/>
+        <path d="M50 98 A 48 48 0 0 0 98 50 A 45 45 0 0 1 50 85 A 45 45 0 0 1 2 50 A 48 48 0 0 0 50 98 Z" fill="rgba(0,0,0,0.2)"/>
+        <!-- Brain folds hint -->
+        <path d="M30 30 Q 40 20 50 35 Q 60 20 70 30 Q 80 40 70 50" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="3" stroke-linecap="round"/>
+        <path d="M35 60 Q 50 75 65 60" fill="none" stroke="rgba(0,0,0,0.15)" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+    `;
 
     // Eyes
     const eyes = document.createElement('div');
     eyes.className = 'snap-eyes';
+    eyes.style.zIndex = '1';
     var eye1 = document.createElement('div');
     eye1.className = 'snap-eye';
+    eye1.innerHTML = '<svg viewBox="0 0 12 12" width="100%" height="100%"><circle cx="6" cy="6" r="6" fill="#FFF"/><circle class="pupil" cx="6" cy="6" r="3" fill="#000"/></svg>';
     var eye2 = document.createElement('div');
     eye2.className = 'snap-eye';
+    eye2.innerHTML = '<svg viewBox="0 0 12 12" width="100%" height="100%"><circle cx="6" cy="6" r="6" fill="#FFF"/><circle class="pupil" cx="6" cy="6" r="3" fill="#000"/></svg>';
     eyes.appendChild(eye1);
     eyes.appendChild(eye2);
     this.body.appendChild(eyes);
@@ -242,6 +268,23 @@ class SnapMascot {
     var chatBody = document.createElement('div');
     chatBody.className = 'chat-body';
     chatBody.id = 'snap-chat-body';
+
+    // Swipe to close functionality
+    let startY = 0;
+    header.addEventListener('touchstart', (e) => { startY = e.touches[0].clientY; }, {passive: true});
+    header.addEventListener('touchmove', (e) => {
+      const deltaY = e.touches[0].clientY - startY;
+      if (deltaY > 0) {
+        this.chatPanel.style.transform = `translateY(${deltaY}px)`;
+      }
+    }, {passive: true});
+    header.addEventListener('touchend', (e) => {
+      const deltaY = e.changedTouches[0].clientY - startY;
+      this.chatPanel.style.transform = '';
+      if (deltaY > 50) {
+        this.toggleChat();
+      }
+    }, {passive: true});
 
     var inputArea = document.createElement('div');
     inputArea.className = 'chat-input-area';

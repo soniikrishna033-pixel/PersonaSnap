@@ -58,8 +58,9 @@ export function initNeuralStorm() {
   // Spawn loop
   setInterval(spawnSymbol, 4000);
 
-  // Layer 2: Three.js Network (Disabled on mobile)
-  if (isMobile || !window.THREE) return;
+  // Layer 2: Three.js Network
+  if (!window.THREE) return;
+  const isTouchDevice = /Android|iPhone|iPad/i.test(navigator.userAgent) || isMobile;
 
   const container = document.createElement('div');
   container.id = 'neural-canvas-container';
@@ -69,13 +70,14 @@ export function initNeuralStorm() {
   const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
   
   const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-  renderer.setSize(window.innerWidth, heroSection.clientHeight);
+  const canvasHeight = isTouchDevice ? window.innerHeight * 0.5 : heroSection.clientHeight;
+  renderer.setSize(window.innerWidth, canvasHeight);
   renderer.setPixelRatio(window.devicePixelRatio);
   container.appendChild(renderer.domElement);
 
   camera.position.z = 500;
 
-  const particleCount = 120;
+  const particleCount = isTouchDevice ? 40 : 120;
   const particles = [];
   const particleGeometry = new THREE.BufferGeometry();
   const particlePositions = new Float32Array(particleCount * 3);
@@ -155,20 +157,49 @@ export function initNeuralStorm() {
   });
 
   container.addEventListener('click', (e) => {
+    if (isTouchDevice) return; // Handled by touchstart
     isClicking = true;
     clickTime = Date.now();
     const rect = container.getBoundingClientRect();
     clickPos.x = e.clientX - rect.left - window.innerWidth / 2;
-    clickPos.y = -(e.clientY - rect.top) + heroSection.clientHeight / 2;
+    clickPos.y = -(e.clientY - rect.top) + canvasHeight / 2;
 
-    // Visual ripple circle
+    createRipple(e.clientX, e.clientY);
+  });
+
+  function createRipple(clientX, clientY) {
+    const rect = container.getBoundingClientRect();
     const ripple = document.createElement('div');
     ripple.className = 'neural-ripple';
-    ripple.style.left = e.clientX - rect.left + 'px';
-    ripple.style.top = e.clientY - rect.top + 'px';
+    ripple.style.left = clientX - rect.left + 'px';
+    ripple.style.top = clientY - rect.top + 'px';
     heroSection.appendChild(ripple);
     setTimeout(() => ripple.remove(), 1000);
-  });
+  }
+
+  // Touch & Gyro Support
+  if (isTouchDevice) {
+    container.addEventListener('touchstart', (e) => {
+      isClicking = true;
+      clickTime = Date.now();
+      const rect = container.getBoundingClientRect();
+      const touch = e.touches[0];
+      clickPos.x = touch.clientX - rect.left - window.innerWidth / 2;
+      clickPos.y = -(touch.clientY - rect.top) + canvasHeight / 2;
+      createRipple(touch.clientX, touch.clientY);
+    }, {passive: true});
+    
+    if (window.DeviceOrientationEvent) {
+      window.addEventListener('deviceorientation', (e) => {
+        if (!e.gamma || !e.beta) return;
+        const tiltX = e.gamma * 2;
+        const tiltY = e.beta * 2;
+        camera.position.x += (tiltX - camera.position.x) * 0.05;
+        camera.position.y += (-tiltY - camera.position.y) * 0.05;
+        camera.lookAt(scene.position);
+      });
+    }
+  }
 
   // Chain reaction pulse — neuron firing effect
   function triggerChainPulse(startIdx, depth = 0) {
@@ -206,9 +237,10 @@ export function initNeuralStorm() {
 
   window.addEventListener('resize', () => {
     if(!heroSection) return;
-    camera.aspect = window.innerWidth / heroSection.clientHeight;
+    const newHeight = isTouchDevice ? window.innerHeight * 0.5 : heroSection.clientHeight;
+    camera.aspect = window.innerWidth / newHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, heroSection.clientHeight);
+    renderer.setSize(window.innerWidth, newHeight);
   });
 
   function animate() {

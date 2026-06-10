@@ -11,281 +11,109 @@
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/neural-storm.css">
   <link rel="stylesheet" href="/css/snap.css">
-  <style>
-    /* Hero Specific Styles */
-    .hero {
-      position: relative;
-      min-height: 80vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      overflow: hidden;
-      padding: 4rem 20px;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 10;
-      max-width: 800px;
-    }
-
-    .typewriter-text {
-      color: var(--primary);
-      border-right: 3px solid var(--primary);
-      animation: blink 0.75s step-end infinite;
-    }
-
-    @keyframes blink {
-      from, to { border-color: transparent }
-      50% { border-color: var(--primary); }
-    }
-
-    .hero h1 {
-      font-size: clamp(2.5rem, 5vw, 4.5rem);
-      margin-bottom: 1.5rem;
-    }
-
-    .hero p {
-      font-size: 1.25rem;
-      color: var(--text-muted);
-      margin-bottom: 2rem;
-    }
-
-    .trust-badges {
-      margin-top: 3rem;
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      flex-wrap: wrap;
-      color: var(--text-muted);
-      font-size: 0.9rem;
-    }
-
-    /* Floating Particles */
-    .particles-bg {
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    .particle {
-      position: absolute;
-      background: radial-gradient(circle, rgba(124, 58, 237, 0.4) 0%, rgba(0,0,0,0) 70%);
-      border-radius: 50%;
-      animation: float 20s infinite linear;
-    }
-
-    @keyframes float {
-      0% { transform: translateY(100vh) scale(0); opacity: 0; }
-      10% { opacity: 1; }
-      90% { opacity: 1; }
-      100% { transform: translateY(-10vh) scale(1); opacity: 0; }
-    }
-
-    /* Category Grid */
-    .section-title {
-      text-align: center;
-      font-size: 2.5rem;
-      margin-bottom: 3rem;
-    }
-
-    .categories-section {
-      padding: 5rem 0;
-    }
-
-    .category-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 2rem;
-    }
-
-    .category-card {
-      padding: 2rem;
-      text-align: center;
-      transition: all var(--transition-normal);
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .category-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: radial-gradient(circle at center, var(--hover-color) 0%, transparent 70%);
-      opacity: 0;
-      transition: opacity var(--transition-normal);
-      z-index: 0;
-      pointer-events: none;
-    }
-
-    .category-card:hover {
-      transform: scale(1.02);
-      border-color: var(--hover-color);
-    }
-
-    .category-card:hover::before {
-      opacity: 0.1;
-    }
-
-    .category-content {
-      position: relative;
-      z-index: 1;
-    }
-
-    .category-icon {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-    }
-
-    .category-title {
-      font-size: 1.5rem;
-      margin-bottom: 0.5rem;
-    }
-
-    .category-desc {
-      color: var(--text-muted);
-      margin-bottom: 1rem;
-      font-size: 0.95rem;
-    }
-
-    .category-count {
-      font-size: 0.85rem;
-      font-weight: 600;
-      color: var(--text-main);
-      opacity: 0.8;
-    }
-
-    /* Featured Quizzes */
-    .featured-section {
-      padding: 5rem 0;
-      background: rgba(124, 58, 237, 0.02);
-    }
-
-    .horizontal-scroll {
-      display: flex;
-      gap: 1.5rem;
-      overflow-x: auto;
-      padding: 1rem 0 2rem;
-      scroll-snap-type: x mandatory;
-    }
-
-    .quiz-card {
-      min-width: 300px;
-      flex: 0 0 300px;
-      padding: 1.5rem;
-      scroll-snap-align: start;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .quiz-emoji {
-      font-size: 4rem;
-      margin-bottom: 1rem;
-      text-align: center;
-    }
-
-    .quiz-tag {
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      padding: 4px 8px;
-      border-radius: 4px;
-      display: inline-block;
-      margin-bottom: 0.5rem;
-      font-weight: 700;
-    }
-
-    .quiz-title {
-      font-size: 1.25rem;
-      margin-bottom: 1rem;
-      flex-grow: 1;
-    }
-
-    .quiz-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.85rem;
-      color: var(--text-muted);
-      margin-bottom: 1.5rem;
-    }
-
-    .xp-badge {
-      background: rgba(245, 158, 11, 0.2);
-      color: var(--gold);
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 0.8rem;
-    }
-
-    /* How It Works */
-    .steps-section {
-      padding: 5rem 0;
-    }
-
-    .steps-container {
-      display: flex;
-      justify-content: center;
-      gap: 3rem;
-      flex-wrap: wrap;
-    }
-
-    .step-item {
-      flex: 1;
-      min-width: 250px;
-      text-align: center;
-    }
-
-    .step-number {
-      width: 40px;
-      height: 40px;
-      background: var(--primary);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 1rem;
-      font-weight: bold;
-      font-family: var(--font-heading);
-    }
-
-    /* Footer */
-    footer {
-      padding: 4rem 0 2rem;
-      border-top: 1px solid rgba(255,255,255,0.05);
-      margin-top: 4rem;
-    }
-
-    .footer-content {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 2rem;
-      margin-bottom: 2rem;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 1.5rem;
-    }
-  </style>
+  <!-- Adsterra Verification or other meta could go here -->
 </head>
 <body>
+
+  <!-- SVG Defs for reuse and gradients -->
+  <svg style="display:none;">
+    <defs>
+      <linearGradient id="primary-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#7C3AED" />
+        <stop offset="100%" stop-color="#06B6D4" />
+      </linearGradient>
+      <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#F59E0B" />
+        <stop offset="100%" stop-color="#FCD34D" />
+      </linearGradient>
+      <linearGradient id="danger-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#EF4444" />
+        <stop offset="100%" stop-color="#F87171" />
+      </linearGradient>
+      
+      <!-- Category Gradients -->
+      <linearGradient id="cat-personality" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#7C3AED" /><stop offset="100%" stop-color="#A855F7" />
+      </linearGradient>
+      <linearGradient id="cat-iq" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#2563EB" /><stop offset="100%" stop-color="#60A5FA" />
+      </linearGradient>
+      <linearGradient id="cat-math" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#059669" /><stop offset="100%" stop-color="#34D399" />
+      </linearGradient>
+      <linearGradient id="cat-spell" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#D97706" /><stop offset="100%" stop-color="#FCD34D" />
+      </linearGradient>
+      <linearGradient id="cat-puzzle" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#DC2626" /><stop offset="100%" stop-color="#F87171" />
+      </linearGradient>
+      <linearGradient id="cat-trivia" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#0891B2" /><stop offset="100%" stop-color="#22D3EE" />
+      </linearGradient>
+
+      <!-- Drop Shadow Filter for 3D effect -->
+      <filter id="svg-shadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000" flood-opacity="0.4"/>
+      </filter>
+      <!-- Glow Filter -->
+      <filter id="svg-glow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+        <feMerge>
+          <feMergeNode in="coloredBlur"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
+    </defs>
+  </svg>
 
   <nav class="navbar">
     <div class="container">
       <div class="logo">
-        <span style="font-size: 1.8rem;">🧠</span> PersonaSnap
+        <div id="nav-brain-logo" class="brain-logo-container" data-size="45"></div>
+        <span class="logo-text">Persona<span class="gradient-text">Snap</span></span>
       </div>
-      <div class="nav-links">
-        <a href="/">Home</a>
-        <a href="#quizzes">Quizzes</a>
-        <a href="/leaderboard.html">Leaderboard</a>
-        <a href="/dashboard.html">Dashboard</a>
+      
+      <!-- Mobile Menu Toggle -->
+      <button class="mobile-menu-btn" id="mobile-menu-toggle" aria-label="Toggle Menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+      </button>
+
+      <div class="nav-links" id="nav-links">
+        <a href="/" class="nav-btn" data-icon="home">
+          <svg class="nav-icon" viewBox="0 0 24 24" width="20" height="20">
+            <path class="anim-stroke" d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+            <path class="anim-fill" d="M9 22V12h6v10" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>
+          </svg>
+          Home
+        </a>
+        <a href="#quizzes" class="nav-btn" data-icon="quizzes">
+          <svg class="nav-icon" viewBox="0 0 24 24" width="20" height="20">
+            <path class="anim-stroke" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path class="anim-fill" d="M12 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zm0 10c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4z" fill="none" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          Quizzes
+        </a>
+        <a href="#growth-hub" class="nav-btn" data-icon="blog">
+          <svg class="nav-icon" viewBox="0 0 24 24" width="20" height="20">
+            <path class="anim-stroke" d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" fill="none" stroke="currentColor" stroke-width="2"/>
+            <path class="anim-fill" d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" fill="none" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          Blog
+        </a>
+        <a href="/dashboard.html" class="nav-btn" data-icon="dashboard">
+          <svg class="nav-icon" viewBox="0 0 24 24" width="20" height="20">
+            <path class="anim-stroke" d="M18 20V10" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path class="anim-fill" d="M12 20V4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <path class="anim-stroke" d="M6 20v-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          Dashboard
+        </a>
+        <a href="/leaderboard.html" class="nav-btn" data-icon="leaderboard">
+          <svg class="nav-icon" viewBox="0 0 24 24" width="20" height="20">
+            <path class="anim-stroke" d="M8 21h8m-4-4v4m-5.2-9.4L12 3l5.2 8.6c.4.6.8 1.4.8 2.2 0 3.3-2.7 6-6 6s-6-2.7-6-6c0-.8.4-1.6.8-2.2z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+          </svg>
+          Leaderboard
+        </a>
       </div>
       <div class="nav-right">
         <div class="streak-counter" title="Current Streak">
@@ -300,9 +128,12 @@
   <section class="hero">
     <div class="particles-bg" id="particles"></div>
     <div class="hero-content animate-fade-up">
+      <div id="hero-brain-logo" class="brain-logo-container floating-anim" data-size="120" style="margin: 0 auto 2rem auto;"></div>
       <h1>Discover <span class="typewriter-text" id="typewriter">yourself</span><span style="opacity: 0;">|</span>. Grow Every Day.</h1>
       <p>Take engaging quizzes. Discover your hidden traits. Share your results with the world.</p>
-      <a href="#quizzes" class="btn-primary" style="display:inline-block; margin-top: 1rem; font-size: 1.1rem; padding: 14px 32px;">Explore Quizzes &rarr;</a>
+      <a href="#quizzes" class="btn-primary anim-btn">
+        Explore Quizzes &rarr;
+      </a>
       
       <div class="trust-badges">
         <div class="stat-item">
@@ -324,50 +155,72 @@
   <section class="categories-section container">
     <h2 class="section-title animate-fade-up">Explore Categories</h2>
     <div class="category-grid">
-      <!-- Generated by JS, but keeping static placeholders for fallback -->
-      <div class="glass-card category-card" style="--hover-color: #7C3AED;" onclick="window.location.href='#quizzes'">
+      <!-- 3D SVGs -->
+      <div class="glass-card category-card" onclick="window.location.href='#quizzes'">
         <div class="category-content">
-          <div class="category-icon">🧠</div>
+          <svg class="category-icon-svg" viewBox="0 0 100 100" width="80" height="80" filter="url(#svg-shadow)">
+            <path d="M50 10 C 20 10, 10 30, 10 50 C 10 75, 30 90, 50 90 C 70 90, 90 75, 90 50 C 90 30, 80 10, 50 10 Z" fill="url(#cat-personality)" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+            <path d="M50 10 L 50 90" stroke="rgba(0,0,0,0.2)" stroke-width="4"/>
+          </svg>
           <h3 class="category-title">Personality</h3>
           <p class="category-desc">Who are you really?</p>
           <span class="category-count">5 quizzes</span>
         </div>
       </div>
-      <div class="glass-card category-card" style="--hover-color: #2563EB;">
+      
+      <div class="glass-card category-card">
         <div class="category-content">
-          <div class="category-icon">⚡</div>
+          <svg class="category-icon-svg" viewBox="0 0 100 100" width="80" height="80" filter="url(#svg-shadow)">
+            <path d="M60 10 L 20 55 L 45 55 L 40 90 L 80 45 L 55 45 Z" fill="url(#cat-iq)" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+          </svg>
           <h3 class="category-title">IQ & Logic</h3>
           <p class="category-desc">How sharp is your mind?</p>
           <span class="category-count">2 quizzes</span>
         </div>
       </div>
-      <div class="glass-card category-card" style="--hover-color: #059669;">
+
+      <div class="glass-card category-card">
         <div class="category-content">
-          <div class="category-icon">🔢</div>
+          <svg class="category-icon-svg" viewBox="0 0 100 100" width="80" height="80" filter="url(#svg-shadow)">
+            <rect x="20" y="20" width="60" height="60" rx="10" fill="url(#cat-math)" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+            <text x="50" y="65" font-size="40" font-family="var(--font-heading)" fill="white" text-anchor="middle" font-weight="bold">+/-</text>
+          </svg>
           <h3 class="category-title">Math Blitz</h3>
           <p class="category-desc">Beat the clock</p>
           <span class="category-count">1 quiz</span>
         </div>
       </div>
-      <div class="glass-card category-card" style="--hover-color: #D97706;">
+
+      <div class="glass-card category-card">
         <div class="category-content">
-          <div class="category-icon">🔤</div>
+          <svg class="category-icon-svg" viewBox="0 0 100 100" width="80" height="80" filter="url(#svg-shadow)">
+            <path d="M30 80 L 50 20 L 70 80 M 40 60 L 60 60" fill="none" stroke="url(#cat-spell)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M50 10 L 40 5 L 60 5 Z" fill="#FCD34D"/>
+          </svg>
           <h3 class="category-title">Spell Bee</h3>
           <p class="category-desc">Spell it right</p>
           <span class="category-count">1 quiz</span>
         </div>
       </div>
-      <div class="glass-card category-card" style="--hover-color: #DC2626;">
+
+      <div class="glass-card category-card">
         <div class="category-content">
-          <div class="category-icon">🧩</div>
+          <svg class="category-icon-svg" viewBox="0 0 100 100" width="80" height="80" filter="url(#svg-shadow)">
+            <path d="M30 30 h15 a10 10 0 0 1 20 0 h15 v15 a10 10 0 0 0 0 20 v15 h-15 a10 10 0 0 0 -20 0 h-15 v-15 a10 10 0 0 1 0 -20 z" fill="url(#cat-puzzle)" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+          </svg>
           <h3 class="category-title">Puzzles</h3>
           <p class="category-desc">Can you crack it?</p>
           <span class="category-count">1 quiz</span>
         </div>
       </div>
-      <div class="glass-card category-card" style="--hover-color: #0891B2;">
+
+      <div class="glass-card category-card">
         <div class="category-content">
-          <div class="category-icon">🌎</div>
+          <svg class="category-icon-svg" viewBox="0 0 100 100" width="80" height="80" filter="url(#svg-shadow)">
+            <circle cx="50" cy="50" r="35" fill="url(#cat-trivia)" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
+            <ellipse cx="50" cy="50" rx="15" ry="35" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+            <line x1="15" y1="50" x2="85" y2="50" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+          </svg>
           <h3 class="category-title">Trivia</h3>
           <p class="category-desc">How much do you know?</p>
           <span class="category-count">Coming Soon</span>
@@ -380,17 +233,133 @@
     <div class="container">
       <h2 class="section-title animate-fade-up">Trending Quizzes</h2>
       <div class="horizontal-scroll hide-scrollbar" id="featured-quizzes">
-        <!-- Will be populated by JS -->
+        <!-- Populated by JS -->
       </div>
     </div>
   </section>
 
-  <!-- Adsterra Native Ad Placeholder -->
-  <div class="container" style="text-align: center; margin: 2rem auto;">
-    <div style="background: rgba(255,255,255,0.02); border: 1px dashed rgba(255,255,255,0.2); padding: 2rem; color: var(--text-muted);">
-      Adsterra Native Ad Placeholder
+  <!-- Auto-sliding Reviews Section -->
+  <section class="steps-section container">
+    <h2 class="section-title animate-fade-up">What Our Community Says 💬</h2>
+    <div class="carousel-container">
+      <div class="carousel-track">
+        <!-- Review 1 -->
+        <div class="review-slide glass-card">
+          <div class="review-header">
+            <div class="review-avatar">SK</div>
+            <div>
+              <div class="review-user">Sarah K. <span class="verified-badge">✓</span></div>
+              <div class="review-location">New York</div>
+            </div>
+          </div>
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"The attachment style quiz completely changed how I see my relationships. The blog after was so helpful!"</p>
+          <div class="quiz-tag">Quiz: Attachment Style</div>
+        </div>
+        <!-- Review 2 -->
+        <div class="review-slide glass-card">
+          <div class="review-header">
+            <div class="review-avatar" style="background:var(--cyan)">MT</div>
+            <div>
+              <div class="review-user">Marcus T. <span class="verified-badge">✓</span></div>
+              <div class="review-location">California</div>
+            </div>
+          </div>
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"I scored Diamond level in a week. The daily quizzes are genuinely addictive and educational!"</p>
+          <div class="quiz-tag">Quiz: IQ Estimator</div>
+        </div>
+        <!-- Review 3 -->
+        <div class="review-slide glass-card">
+          <div class="review-header">
+            <div class="review-avatar" style="background:var(--success)">PM</div>
+            <div>
+              <div class="review-user">Priya M. <span class="verified-badge">✓</span></div>
+              <div class="review-location">Texas</div>
+            </div>
+          </div>
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"PersonaSnap helped me realize I was the red flag in my relationship. Now I'm actively working on it 🌱"</p>
+          <div class="quiz-tag">Quiz: Red Flag Test</div>
+        </div>
+        <!-- Review 4 -->
+        <div class="review-slide glass-card">
+          <div class="review-header">
+            <div class="review-avatar" style="background:var(--danger)">JR</div>
+            <div>
+              <div class="review-user">Jake R. <span class="verified-badge">✓</span></div>
+              <div class="review-location">Florida</div>
+            </div>
+          </div>
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Speed math quiz is INSANE. My brain feels sharper every day since I started playing."</p>
+          <div class="quiz-tag">Quiz: Math Blitz</div>
+        </div>
+        <!-- Review 5 -->
+        <div class="review-slide glass-card">
+          <div class="review-header">
+            <div class="review-avatar" style="background:var(--primary)">AN</div>
+            <div>
+              <div class="review-user">Aisha N. <span class="verified-badge">✓</span></div>
+              <div class="review-location">Chicago</div>
+            </div>
+          </div>
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"The personality descriptions are so accurate it's actually scary. Snap the mascot is adorable too!"</p>
+          <div class="quiz-tag">Quiz: Love Language</div>
+        </div>
+        <!-- Review 6 -->
+        <div class="review-slide glass-card">
+          <div class="review-header">
+            <div class="review-avatar" style="background:var(--gold)">TW</div>
+            <div>
+              <div class="review-user">Tyler W. <span class="verified-badge">✓</span></div>
+              <div class="review-location">Seattle</div>
+            </div>
+          </div>
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Finally a quiz site that teaches you something real. The growth tracker keeps me coming back daily."</p>
+          <div class="quiz-tag">Quiz: Overthinker Test</div>
+        </div>
+        <!-- Review 7 -->
+        <div class="review-slide glass-card">
+          <div class="review-header">
+            <div class="review-avatar" style="background:#A855F7">EL</div>
+            <div>
+              <div class="review-user">Emma L. <span class="verified-badge">✓</span></div>
+              <div class="review-location">Boston</div>
+            </div>
+          </div>
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Shared my result on Instagram and 10 friends took the quiz same day. The share cards look amazing!"</p>
+          <div class="quiz-tag">Quiz: Attachment Style</div>
+        </div>
+        <!-- Review 8 -->
+        <div class="review-slide glass-card">
+          <div class="review-header">
+            <div class="review-avatar" style="background:#34D399">RC</div>
+            <div>
+              <div class="review-user">Ryan C. <span class="verified-badge">✓</span></div>
+              <div class="review-location">Austin</div>
+            </div>
+          </div>
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Went from Bronze to Gold in 2 weeks. The puzzle quizzes are next level challenging. Love this site!"</p>
+          <div class="quiz-tag">Quiz: Logic Puzzle Master</div>
+        </div>
+      </div>
+      <button class="carousel-btn" id="carousel-prev">&larr;</button>
+      <button class="carousel-btn" id="carousel-next">&rarr;</button>
+      <div class="carousel-dots">
+        <span class="carousel-dot active"></span>
+        <span class="carousel-dot"></span>
+        <span class="carousel-dot"></span>
+        <span class="carousel-dot"></span>
+        <span class="carousel-dot"></span>
+        <span class="carousel-dot"></span>
+      </div>
     </div>
-  </div>
+  </section>
 
   <!-- Growth Hub Section -->
   <section class="featured-section" id="growth-hub" style="background: transparent;">
@@ -400,80 +369,111 @@
         <!-- Populated by JS -->
       </div>
       <div style="text-align: center; margin-top: 3rem;">
-        <button class="btn-primary" onclick="window.location.href='/blog/why-youre-anxiously-attached.html'" style="background: transparent; border: 1px solid var(--primary); color: var(--primary);">View All Articles</button>
+        <button class="btn-primary anim-btn" onclick="window.location.href='/blog/why-youre-anxiously-attached.html'" style="background: transparent; border: 1px solid var(--primary); color: var(--primary);">View All Articles</button>
       </div>
     </div>
   </section>
 
-  <!-- Testimonials Section -->
-  <section class="steps-section container">
-    <h2 class="section-title animate-fade-up">What Our Community Says 💬</h2>
-    <div class="category-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
-      <div class="glass-card category-card animate-fade-up" style="text-align: left;">
-        <div style="color: var(--gold); font-size: 1.5rem; margin-bottom: 1rem;">★★★★★</div>
-        <p style="font-style: italic; margin-bottom: 1.5rem; font-size: 1.1rem; line-height: 1.6;">"I went from anxious to secure attachment in 2 months using PersonaSnap's guides!"</p>
-        <div style="font-weight: bold; color: var(--primary);">— Sarah K.</div>
-      </div>
-      <div class="glass-card category-card animate-fade-up" style="text-align: left; animation-delay: 0.1s;">
-        <div style="color: var(--gold); font-size: 1.5rem; margin-bottom: 1rem;">★★★★★</div>
-        <p style="font-style: italic; margin-bottom: 1.5rem; font-size: 1.1rem; line-height: 1.6;">"The red flag quiz literally changed how I communicate with my partner."</p>
-        <div style="font-weight: bold; color: var(--cyan);">— Marcus T.</div>
-      </div>
-      <div class="glass-card category-card animate-fade-up" style="text-align: left; animation-delay: 0.2s;">
-        <div style="color: var(--gold); font-size: 1.5rem; margin-bottom: 1rem;">★★★★★</div>
-        <p style="font-style: italic; margin-bottom: 1.5rem; font-size: 1.1rem; line-height: 1.6;">"I read a new article every morning. My confidence is insane now."</p>
-        <div style="font-weight: bold; color: var(--success);">— Priya M.</div>
+  <!-- Detailed Footer -->
+  <footer class="main-footer">
+    <!-- Footer Stats Bar -->
+    <div class="footer-stats-bar">
+      <div class="container footer-stats-grid">
+        <div class="f-stat-item">🧠 5M+ Quizzes Taken</div>
+        <div class="f-stat-item">👥 2M+ Users Worldwide</div>
+        <div class="f-stat-item">⭐ 4.9 Average Rating</div>
+        <div class="f-stat-item">🌍 150+ Countries</div>
       </div>
     </div>
-  </section>
 
-  <section class="steps-section container">
-    <h2 class="section-title animate-fade-up">How It Works</h2>
-    <div class="steps-container">
-      <div class="step-item animate-fade-up" style="animation-delay: 0.1s;">
-        <div class="step-number">1</div>
-        <h3>Choose a Quiz 🎯</h3>
-        <p class="text-muted" style="margin-top: 0.5rem;">Pick from our wide variety of tests tailored to your interests.</p>
+    <!-- Newsletter Section -->
+    <div class="container newsletter-section glass-card">
+      <div class="nl-left">
+        <h3>🧠 Get Weekly Brain Boosts</h3>
+        <p>New quizzes + psychology tips delivered every Monday</p>
       </div>
-      <div class="step-item animate-fade-up" style="animation-delay: 0.2s;">
-        <div class="step-number">2</div>
-        <h3>Answer Questions ⚡</h3>
-        <p class="text-muted" style="margin-top: 0.5rem;">Engage with our interactive player and beat the clock.</p>
-      </div>
-      <div class="step-item animate-fade-up" style="animation-delay: 0.3s;">
-        <div class="step-number">3</div>
-        <h3>Share Your Result 📤</h3>
-        <p class="text-muted" style="margin-top: 0.5rem;">Get a beautiful shareable card and compare with friends.</p>
+      <div class="nl-right">
+        <input type="email" placeholder="Enter your email" class="glass-input">
+        <button class="btn-primary anim-btn">Subscribe &rarr;</button>
       </div>
     </div>
-  </section>
 
-  <footer class="container">
-    <div class="footer-content">
-      <div>
-        <div class="logo">🧠 PersonaSnap</div>
-        <p class="text-muted" style="margin-top: 0.5rem;">Made with 🧠 for curious minds.</p>
+    <div class="container footer-columns">
+      <div class="footer-col brand-col">
+        <div class="logo">
+          <div id="footer-brain-logo" class="brain-logo-container" data-size="60"></div>
+          <span class="logo-text">Persona<span class="gradient-text">Snap</span></span>
+        </div>
+        <p class="tagline">Play. Discover. Grow. 🧠</p>
+        <p class="f-desc">The world's most engaging personality quiz platform. Discover yourself every day.</p>
+        <div class="social-icons">
+          <!-- Animated Social SVGs -->
+          <svg viewBox="0 0 24 24" class="social-icon"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          <svg viewBox="0 0 24 24" class="social-icon"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+        </div>
+        <p class="f-copyright">© 2026 PersonaSnap.<br>All rights reserved.</p>
       </div>
-      <div class="footer-links text-muted">
-        <a href="/about.html">About</a>
-        <a href="/terms.html">Terms</a>
-        <a href="/privacy.html">Privacy</a>
-        <a href="/contact.html">Contact</a>
+      <div class="footer-col">
+        <h4 class="gradient-text">Explore 🎮</h4>
+        <a href="#quizzes">All Quizzes</a>
+        <a href="#quizzes">Personality Tests</a>
+        <a href="#quizzes">IQ & Logic</a>
+        <a href="#quizzes">Math Blitz</a>
+        <a href="#quizzes">Spell Bee</a>
+        <a href="#quizzes">Logic Puzzles</a>
+        <a href="#quizzes">Trivia</a>
+        <a href="/leaderboard.html">Leaderboard</a>
+      </div>
+      <div class="footer-col">
+        <h4 class="gradient-text">Grow 📖</h4>
+        <a href="#growth-hub">Growth Hub (Blog)</a>
+        <a href="#">Relationships</a>
+        <a href="#">Self Awareness</a>
+        <a href="#">Mental Wellness</a>
+        <a href="#">Productivity</a>
+        <a href="#">Social Skills</a>
+        <a href="/dashboard.html">My Dashboard</a>
+        <a href="/dashboard.html">My Badges</a>
+      </div>
+      <div class="footer-col">
+        <h4 class="gradient-text">Company ✨</h4>
+        <a href="/about.html">About PersonaSnap</a>
+        <a href="#">How It Works</a>
+        <a href="/terms.html">Terms of Service</a>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/privacy.html">Cookie Policy</a>
+        <a href="/contact.html">Contact Us</a>
+        <a href="#">Advertise With Us</a>
+        <a href="#">Suggest a Quiz</a>
       </div>
     </div>
-    <div class="text-center text-muted" style="font-size: 0.85rem;">
-      &copy; 2026 PersonaSnap. All rights reserved.
+    <div class="footer-bottom">
+      <div class="container f-bottom-flex">
+        <div>Made with 🧠 and ❤️ for curious minds worldwide</div>
+        <div id="footer-bottom-logo" class="brain-logo-container" data-size="30"></div>
+        <div>🔒 Your data is safe with us</div>
+      </div>
     </div>
   </footer>
 
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script type="module" src="/js/firebase.js"></script>
   <script type="module" src="/js/auth.js"></script>
   <script type="module" src="/js/quizzes.js"></script>
-  <script type="module" src="/js/quizzes.js"></script>
   <script type="module" src="/js/blogs.js"></script>
+  
   <script type="module">
     import { quizzes } from '/js/quizzes.js';
     import { blogs } from '/js/blogs.js';
+    import { initBrainLogos } from '/js/brain-logo.js';
+    import { initCarousel } from '/js/carousel.js';
+    import { initNeuralStorm } from '/js/neural-storm.js';
+
+    // Initialize New Features
+    initBrainLogos();
+    initCarousel();
+    initNeuralStorm();
 
     // Typewriter effect
     const words = ["yourself", "your potential", "your mind", "your future"];
@@ -482,6 +482,7 @@
     const typewriter = document.getElementById('typewriter');
     
     function typingEffect() {
+      if(!typewriter) return;
       let word = words[i].split("");
       var loopTyping = function() {
         if (word.length > 0) {
@@ -496,6 +497,7 @@
     }
 
     function deletingEffect() {
+      if(!typewriter) return;
       let word = words[i].split("");
       var loopDeleting = function() {
         if (word.length > 0) {
@@ -511,34 +513,9 @@
       loopDeleting();
     }
     
-    typewriter.innerHTML = "";
-    typingEffect();
-
-    // Init streak counter
-    const navStreak = document.getElementById('nav-streak');
-    if (navStreak) {
-      navStreak.textContent = localStorage.getItem('quizStreak') || '0';
-    }
-    // Init XP
-    const navXp = document.getElementById('nav-xp');
-    const mockXp = localStorage.getItem('mockXp');
-    if (navXp && mockXp && parseInt(mockXp) > 0) {
-      navXp.style.display = '';
-      navXp.textContent = mockXp + ' XP';
-    }
-
-    // Generate Particles
-    const particlesContainer = document.getElementById('particles');
-    for(let j=0; j<20; j++) {
-      const p = document.createElement('div');
-      p.className = 'particle';
-      const size = Math.random() * 60 + 20;
-      p.style.width = size + 'px';
-      p.style.height = size + 'px';
-      p.style.left = Math.random() * 100 + '%';
-      p.style.animationDelay = (Math.random() * 20) + 's';
-      p.style.animationDuration = (Math.random() * 10 + 15) + 's';
-      particlesContainer.appendChild(p);
+    if(typewriter) {
+      typewriter.innerHTML = "";
+      typingEffect();
     }
 
     // Number Counter Animation
@@ -559,7 +536,7 @@
       });
     };
     
-    // Intersection Observer for scroll animations
+    // Intersection Observer
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -571,11 +548,8 @@
       });
     }, { threshold: 0.1 });
 
-    document.querySelectorAll('.section-title').forEach(el => {
-      el.classList.remove('animate-fade-up'); // reset for observer
-      observer.observe(el);
-    });
-    observer.observe(document.querySelector('.trust-badges'));
+    document.querySelectorAll('.section-title').forEach(el => observer.observe(el));
+    if(document.querySelector('.trust-badges')) observer.observe(document.querySelector('.trust-badges'));
 
     // Populate Featured Quizzes
     const featuredContainer = document.getElementById('featured-quizzes');
@@ -587,26 +561,28 @@
       'Puzzle': '#DC2626'
     };
 
-    quizzes.slice(0, 6).forEach(quiz => {
-      const card = document.createElement('div');
-      card.className = 'glass-card quiz-card';
-      const color = categoryColors[quiz.category] || '#7C3AED';
-      
-      card.innerHTML = `
-        <div class="quiz-emoji">${quiz.emoji}</div>
-        <div class="quiz-tag" style="background: ${color}20; color: ${color}">${quiz.category}</div>
-        <h3 class="quiz-title">${quiz.title}</h3>
-        <div class="quiz-meta">
-          <span>👥 ${Math.floor(Math.random() * 50 + 10)}k plays</span>
-          <span>⏱ ${quiz.timer ? quiz.timerText : 'No timer'}</span>
-        </div>
-        <div style="display:flex; justify-content: space-between; align-items:center;">
-          <span class="xp-badge">+${quiz.xp} XP</span>
-          <button class="btn-primary" style="padding: 8px 16px; font-size: 0.9rem;" onclick="window.location.href='/quiz.html?id=${quiz.id}'">Start &rarr;</button>
-        </div>
-      `;
-      featuredContainer.appendChild(card);
-    });
+    if(featuredContainer && quizzes) {
+      quizzes.slice(0, 6).forEach(quiz => {
+        const card = document.createElement('div');
+        card.className = 'glass-card quiz-card';
+        const color = categoryColors[quiz.category] || '#7C3AED';
+        
+        card.innerHTML = `
+          <div class="quiz-emoji">${quiz.emoji}</div>
+          <div class="quiz-tag" style="background: ${color}20; color: ${color}">${quiz.category}</div>
+          <h3 class="quiz-title">${quiz.title}</h3>
+          <div class="quiz-meta">
+            <span>👥 ${Math.floor(Math.random() * 50 + 10)}k plays</span>
+            <span>⏱ ${quiz.timer ? quiz.timerText : 'No timer'}</span>
+          </div>
+          <div style="display:flex; justify-content: space-between; align-items:center;">
+            <span class="xp-badge">+${quiz.xp} XP</span>
+            <button class="btn-primary anim-btn" style="padding: 8px 16px; font-size: 0.9rem;" onclick="window.location.href='/quiz.html?id=${quiz.id}'">Start &rarr;</button>
+          </div>
+        `;
+        featuredContainer.appendChild(card);
+      });
+    }
 
     // Populate Latest Blogs
     const blogsContainer = document.getElementById('latest-blogs');
@@ -627,11 +603,30 @@
       });
     }
 
-  </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script type="module">
-    import { initNeuralStorm } from '/js/neural-storm.js';
-    initNeuralStorm();
+    // Nav Button Animations Logic
+    document.querySelectorAll('.nav-btn').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        // Prevent default only if it's an anchor to # hash that we handle elsewhere, but we want the animation
+        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        
+        // Add animating class for CSS transitions
+        this.classList.add('animating');
+        setTimeout(() => {
+          this.classList.remove('animating');
+        }, 800);
+      });
+    });
+
+    // Mobile Menu
+    const menuToggle = document.getElementById('mobile-menu-toggle');
+    const navLinks = document.getElementById('nav-links');
+    if(menuToggle && navLinks) {
+      menuToggle.addEventListener('click', () => {
+        navLinks.classList.toggle('active');
+      });
+    }
+
   </script>
   <script src="/js/snap.js"></script>
 </body>
