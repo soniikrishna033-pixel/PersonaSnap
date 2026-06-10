@@ -126,25 +126,27 @@
 
   <section class="hero">
     <div class="particles-bg" id="particles"></div>
-    <div class="hero-brain hero-brain-css"></div>
-    <h1 class="hero-headline">Discover <span class="typewriter-text" id="typewriter">yourself</span><span style="opacity: 0;">|</span>. Grow Every Day.</h1>
-    <p class="hero-subtext">Take engaging quizzes. Discover your hidden traits. Share your results with the world.</p>
-    <div class="hero-cta">
-      <a href="#quizzes" class="btn-primary anim-btn">Explore Quizzes &rarr;</a>
-    </div>
-    
-    <div class="hero-stats">
-      <div class="hero-stat-item">
-        <div class="hero-stat-number"><span class="counter" data-target="5000000">0</span>+</div>
-        <div class="hero-stat-label">Quizzes Taken</div>
+    <div class="container" style="position: relative; z-index: 5;">
+      <div class="hero-brain hero-brain-css"></div>
+      <h1 class="hero-headline">Discover <span class="typewriter-text" id="typewriter">yourself</span><span style="opacity: 0;">|</span>. Grow Every Day.</h1>
+      <p class="hero-subtext">Take engaging quizzes. Discover your hidden traits. Share your results with the world.</p>
+      <div class="hero-cta">
+        <a href="#quizzes" class="btn-primary anim-btn">Explore Quizzes &rarr;</a>
       </div>
-      <div class="hero-stat-item">
-        <div class="hero-stat-number"><span class="counter" data-target="2000000">0</span>+</div>
-        <div class="hero-stat-label">Users</div>
-      </div>
-      <div class="hero-stat-item">
-        <div class="hero-stat-number">50+</div>
-        <div class="hero-stat-label">Unique Tests</div>
+      
+      <div class="hero-stats">
+        <div class="hero-stat-item">
+          <div class="hero-stat-number"><span class="counter" data-target="5000000">0</span>+</div>
+          <div class="hero-stat-label">Quizzes Taken</div>
+        </div>
+        <div class="hero-stat-item">
+          <div class="hero-stat-number"><span class="counter" data-target="2000000">0</span>+</div>
+          <div class="hero-stat-label">Users</div>
+        </div>
+        <div class="hero-stat-item">
+          <div class="hero-stat-number">50+</div>
+          <div class="hero-stat-label">Unique Tests</div>
+        </div>
       </div>
     </div>
   </section>
@@ -435,7 +437,7 @@
     <div class="footer-bottom">
       <div class="container f-bottom-flex">
         <div>Made with 🧠 and ❤️ for curious minds worldwide</div>
-        <div id="footer-bottom-logo" class="brain-logo-container" data-size="30"></div>
+        <div>🧠</div>
         <div>🔒 Your data is safe with us</div>
       </div>
     </div>
@@ -534,7 +536,7 @@
     }, { threshold: 0.1 });
 
     document.querySelectorAll('.section-title').forEach(el => observer.observe(el));
-    if(document.querySelector('.trust-badges')) observer.observe(document.querySelector('.trust-badges'));
+    if(document.querySelector('.hero-stats')) observer.observe(document.querySelector('.hero-stats'));
 
     // Populate Featured Quizzes
     const featuredContainer = document.getElementById('featured-quizzes');
@@ -614,17 +616,6 @@
 
   </script>
   <script src="/js/snap.js"></script>
-  <!-- Mobile Menu Script -->
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const menuToggle = document.getElementById('mobile-menu-toggle');
-      const navLinks = document.getElementById('nav-links');
-      if (menuToggle && navLinks) {
-        menuToggle.addEventListener('click', () => {
-          navLinks.classList.toggle('active');
-        });
-      }
-    });
-  </script>
+
 </body>
 </html>
