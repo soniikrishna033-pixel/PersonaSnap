@@ -60,14 +60,21 @@ export function initNeuralStorm() {
 
   // Layer 2: Three.js Network
   if (!window.THREE) return;
-  if (window.innerWidth < 768) {
+  const isMobileSize = window.innerWidth < 768;
+
+  if (isMobileSize) {
     console.log('3D disabled on mobile');
-    // Add static gradient background for mobile instead of canvas
-    heroSection.style.background = 'radial-gradient(circle at center, #1a0b2e 0%, #06060F 100%)';
+    document.querySelector('.hero').style.background = `
+      linear-gradient(
+        135deg,
+        #06060F 0%,
+        #1a0533 50%,
+        #06060F 100%
+      )`;
     return;
   }
   
-  const isTouchDevice = /Android|iPhone|iPad/i.test(navigator.userAgent) || isMobile;
+  const isTouchDevice = /Android|iPhone|iPad/i.test(navigator.userAgent) || isMobileSize;
 
   try {
     const container = document.createElement('div');

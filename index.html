@@ -119,107 +119,93 @@
           🔥 <span id="nav-streak">0</span>
         </div>
         <div class="xp-badge" style="display:none;" id="nav-xp">0 XP</div>
-        <button class="btn-primary" id="btn-signin">Sign In</button>
+        <button class="btn-primary signin-btn" id="btn-signin">Sign In</button>
       </div>
     </div>
   </nav>
 
   <section class="hero">
     <div class="particles-bg" id="particles"></div>
-    <div class="hero-content animate-fade-up">
-      <div style="font-size: 5rem; text-align: center; margin-bottom: 1rem;">🧠</div>
-      <h1>Discover <span class="typewriter-text" id="typewriter">yourself</span><span style="opacity: 0;">|</span>. Grow Every Day.</h1>
-      <p>Take engaging quizzes. Discover your hidden traits. Share your results with the world.</p>
-      <a href="#quizzes" class="btn-primary anim-btn">
-        Explore Quizzes &rarr;
-      </a>
-      
-      <div class="trust-badges">
-        <div class="stat-item">
-          <h3 style="color:var(--text-main); font-size: 1.5rem;"><span class="counter" data-target="5000000">0</span>+</h3>
-          <p>Quizzes Taken</p>
-        </div>
-        <div class="stat-item">
-          <h3 style="color:var(--text-main); font-size: 1.5rem;"><span class="counter" data-target="2000000">0</span>+</h3>
-          <p>Users</p>
-        </div>
-        <div class="stat-item">
-          <h3 style="color:var(--text-main); font-size: 1.5rem;">50+</h3>
-          <p>Unique Tests</p>
-        </div>
+    <div class="hero-brain hero-brain-css"></div>
+    <h1 class="hero-headline">Discover <span class="typewriter-text" id="typewriter">yourself</span><span style="opacity: 0;">|</span>. Grow Every Day.</h1>
+    <p class="hero-subtext">Take engaging quizzes. Discover your hidden traits. Share your results with the world.</p>
+    <div class="hero-cta">
+      <a href="#quizzes" class="btn-primary anim-btn">Explore Quizzes &rarr;</a>
+    </div>
+    
+    <div class="hero-stats">
+      <div class="hero-stat-item">
+        <div class="hero-stat-number"><span class="counter" data-target="5000000">0</span>+</div>
+        <div class="hero-stat-label">Quizzes Taken</div>
+      </div>
+      <div class="hero-stat-item">
+        <div class="hero-stat-number"><span class="counter" data-target="2000000">0</span>+</div>
+        <div class="hero-stat-label">Users</div>
+      </div>
+      <div class="hero-stat-item">
+        <div class="hero-stat-number">50+</div>
+        <div class="hero-stat-label">Unique Tests</div>
       </div>
     </div>
   </section>
 
   <section class="categories-section container">
     <h2 class="section-title animate-fade-up">Explore Categories</h2>
-    <div class="category-grid">
-      <!-- 3D SVGs -->
+    <div class="categories-grid">
+      <!-- Category 1 -->
       <div class="glass-card category-card" onclick="window.location.href='#quizzes'">
         <div class="category-content">
-          <svg class="category-icon-svg" viewBox="0 0 100 100" width="80" height="80" filter="url(#svg-shadow)">
-            <path d="M50 10 C 20 10, 10 30, 10 50 C 10 75, 30 90, 50 90 C 70 90, 90 75, 90 50 C 90 30, 80 10, 50 10 Z" fill="url(#cat-personality)" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
-            <path d="M50 10 L 50 90" stroke="rgba(0,0,0,0.2)" stroke-width="4"/>
-          </svg>
+          <div class="category-icon" style="background: #7C3AED20;">🧠</div>
           <h3 class="category-title">Personality</h3>
           <p class="category-desc">Who are you really?</p>
           <span class="category-count">5 quizzes</span>
         </div>
       </div>
       
+      <!-- Category 2 -->
       <div class="glass-card category-card">
         <div class="category-content">
-          <svg class="category-icon-svg" viewBox="0 0 100 100" width="80" height="80" filter="url(#svg-shadow)">
-            <path d="M60 10 L 20 55 L 45 55 L 40 90 L 80 45 L 55 45 Z" fill="url(#cat-iq)" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
-          </svg>
+          <div class="category-icon" style="background: #2563EB20;">⚡</div>
           <h3 class="category-title">IQ & Logic</h3>
           <p class="category-desc">How sharp is your mind?</p>
           <span class="category-count">2 quizzes</span>
         </div>
       </div>
 
+      <!-- Category 3 -->
       <div class="glass-card category-card">
         <div class="category-content">
-          <svg class="category-icon-svg" viewBox="0 0 100 100" width="80" height="80" filter="url(#svg-shadow)">
-            <rect x="20" y="20" width="60" height="60" rx="10" fill="url(#cat-math)" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
-            <text x="50" y="65" font-size="40" font-family="var(--font-heading)" fill="white" text-anchor="middle" font-weight="bold">+/-</text>
-          </svg>
+          <div class="category-icon" style="background: #05966920;">🔢</div>
           <h3 class="category-title">Math Blitz</h3>
           <p class="category-desc">Beat the clock</p>
           <span class="category-count">1 quiz</span>
         </div>
       </div>
 
+      <!-- Category 4 -->
       <div class="glass-card category-card">
         <div class="category-content">
-          <svg class="category-icon-svg" viewBox="0 0 100 100" width="80" height="80" filter="url(#svg-shadow)">
-            <path d="M30 80 L 50 20 L 70 80 M 40 60 L 60 60" fill="none" stroke="url(#cat-spell)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M50 10 L 40 5 L 60 5 Z" fill="#FCD34D"/>
-          </svg>
+          <div class="category-icon" style="background: #D9770620;">🔤</div>
           <h3 class="category-title">Spell Bee</h3>
           <p class="category-desc">Spell it right</p>
           <span class="category-count">1 quiz</span>
         </div>
       </div>
 
+      <!-- Category 5 -->
       <div class="glass-card category-card">
         <div class="category-content">
-          <svg class="category-icon-svg" viewBox="0 0 100 100" width="80" height="80" filter="url(#svg-shadow)">
-            <path d="M30 30 h15 a10 10 0 0 1 20 0 h15 v15 a10 10 0 0 0 0 20 v15 h-15 a10 10 0 0 0 -20 0 h-15 v-15 a10 10 0 0 1 0 -20 z" fill="url(#cat-puzzle)" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
-          </svg>
+          <div class="category-icon" style="background: #DC262620;">🧩</div>
           <h3 class="category-title">Puzzles</h3>
           <p class="category-desc">Can you crack it?</p>
           <span class="category-count">1 quiz</span>
         </div>
       </div>
 
+      <!-- Category 6 -->
       <div class="glass-card category-card">
         <div class="category-content">
-          <svg class="category-icon-svg" viewBox="0 0 100 100" width="80" height="80" filter="url(#svg-shadow)">
-            <circle cx="50" cy="50" r="35" fill="url(#cat-trivia)" stroke="rgba(255,255,255,0.4)" stroke-width="2"/>
-            <ellipse cx="50" cy="50" rx="15" ry="35" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
-            <line x1="15" y1="50" x2="85" y2="50" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
-          </svg>
+          <div class="category-icon" style="background: #0891B220;">🌎</div>
           <h3 class="category-title">Trivia</h3>
           <p class="category-desc">How much do you know?</p>
           <span class="category-count">Coming Soon</span>
