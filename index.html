@@ -12,7 +12,7 @@
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="stylesheet" href="/css/main.css">
   <link rel="stylesheet" href="/css/neural-storm.css">
-  <link rel="stylesheet" href="/css/snap.css">
+  <link rel="stylesheet" href="/css/mascot.css">
   <!-- Adsterra Verification or other meta could go here -->
 </head>
 <body>
@@ -178,10 +178,17 @@
   <section class="categories-section container">
     <h2 class="section-title animate-fade-up">Explore Categories</h2>
     <div class="categories-grid">
+      <style>
+        .category-card:hover .brain-card-icon .icon-normal { display: none !important; }
+        .category-card:hover .brain-card-icon .icon-hover { display: block !important; }
+      </style>
       <!-- Category 1 -->
       <div class="glass-card category-card" onclick="window.location.href='#quizzes'">
         <div class="category-content">
-          <div class="category-icon" style="background: #7C3AED20;">🧠</div>
+          <div class="category-icon brain-card-icon" style="background: transparent;">
+            <img src="/brain-card-normal.svg" class="icon-normal" alt="Personality" style="width: 48px; height: 48px;">
+            <img src="/brain-card-hover.svg" class="icon-hover" alt="Personality" style="display: none; width: 48px; height: 48px;">
+          </div>
           <h3 class="category-title">Personality</h3>
           <p class="category-desc">Who are you really?</p>
           <span class="category-count">5 quizzes</span>
@@ -637,7 +644,7 @@
     }
 
   </script>
-  <script src="/js/snap.js"></script>
+  <script src="/js/mascot.js"></script>
 
 <script>
 const canvas=document.getElementById('c'),ctx=canvas.getContext('2d');

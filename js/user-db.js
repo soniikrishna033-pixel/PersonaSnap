@@ -1,5 +1,5 @@
-import { db } from './firebase.js';
-import { doc, getDoc, updateDoc, collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
+import { db, doc, getDoc, updateDoc } from './firebase.js';
+import { collection, query, orderBy, limit, getDocs } from 'firebase/firestore';
 
 /**
  * Fetches the user profile from Firestore
