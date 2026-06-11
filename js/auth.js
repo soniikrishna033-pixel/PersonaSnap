@@ -48,7 +48,13 @@ export const signIn = async () => {
     window.location.reload();
   } catch (error) {
     console.error("Error signing in", error);
-    alert("Sign in failed. See console for details.");
+    if (error.code === 'auth/unauthorized-domain') {
+      alert("Sign in failed: This domain is not authorized in Firebase. Please add your Vercel URL to Firebase Auth > Settings > Authorized Domains.");
+    } else if (error.code === 'auth/popup-closed-by-user') {
+      // User closed it, do nothing or show a mild message
+    } else {
+      alert("Sign in failed. " + error.message + " (Check console for details)");
+    }
   }
 };
 
