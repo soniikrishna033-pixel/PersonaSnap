@@ -13,12 +13,17 @@ const firebaseConfig = {
 };
 
 // Initialize Firebase only if API key is provided
-let app, auth, db;
+let app, auth, db, exportDoc, exportSetDoc, exportGetDoc, exportUpdateDoc, exportIncrement;
 
 if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY") {
   app = initializeApp(firebaseConfig);
   auth = getAuth(app);
   db = getFirestore(app);
+  exportDoc = doc;
+  exportSetDoc = setDoc;
+  exportGetDoc = getDoc;
+  exportUpdateDoc = updateDoc;
+  exportIncrement = increment;
 } else {
   console.warn("Firebase config is missing. Authentication and database features will use local mock data.");
   // Mock implementations for local testing without Firebase
@@ -40,6 +45,11 @@ if (firebaseConfig.apiKey && firebaseConfig.apiKey !== "YOUR_API_KEY") {
     setDoc: async () => {},
     updateDoc: async () => {}
   };
+  exportDoc = () => ({});
+  exportSetDoc = async () => {};
+  exportGetDoc = async () => ({ exists: () => false, data: () => ({}) });
+  exportUpdateDoc = async () => {};
+  exportIncrement = (n) => n;
 }
 
-export { app, auth, db, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, doc, setDoc, getDoc, updateDoc, increment };
+export { app, auth, db, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, exportDoc as doc, exportSetDoc as setDoc, exportGetDoc as getDoc, exportUpdateDoc as updateDoc, exportIncrement as increment };
