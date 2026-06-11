@@ -61,53 +61,70 @@ export function initNeuralStorm() {
     function generateBrainPoint() {
       let x, y, z;
       while (true) {
-        // Random point in a larger bounding box to space things out
-        x = (Math.random() - 0.5) * 700; // width (X)
-        y = (Math.random() - 0.5) * 500; // height (Y)
-        z = (Math.random() - 0.5) * 800; // length (Z)
+        // Tighter bounding box for denser look
+        x = (Math.random() - 0.5) * 500; // width (X)
+        y = (Math.random() - 0.5) * 400; // height (Y)
+        z = (Math.random() - 0.5) * 550; // length (Z)
         
-        let nx = x / 350;
-        let ny = y / 250;
-        let nz = z / 400;
+        let nx = x / 250;
+        let ny = y / 200;
+        let nz = z / 275;
         
-        // Ellipsoid check
+        // Ellipsoid check (main cerebrum)
         let r2 = (nx*nx) + (ny*ny) + (nz*nz);
-        if (r2 > 1.0) continue;
         
-        // Longitudinal fissure (split hemispheres) - make gap wider
-        if (Math.abs(nx) < 0.15) continue;
+        // Cerebellum check (smaller sphere at bottom back)
+        let cx = x / 100;
+        let cy = (y + 150) / 80;
+        let cz = (z + 180) / 100;
+        let cr2 = (cx*cx) + (cy*cy) + (cz*cz);
         
-        // Flatten bottom
-        if (ny < -0.4 && Math.abs(nz) < 0.5) continue;
-        if (ny < -0.6) continue;
+        let isMain = r2 <= 1.0;
+        let isCerebellum = cr2 <= 1.0;
         
-        // Narrower front (assume front is positive z)
-        if (nz > 0.2) {
-          if (Math.abs(nx) > (1.0 - 0.5 * nz)) continue;
+        // Filter out if not in main brain or cerebellum
+        if (!isMain && !isCerebellum) continue;
+        
+        // Longitudinal fissure (split hemispheres)
+        if (Math.abs(nx) < 0.08 && isMain) continue;
+        if (Math.abs(cx) < 0.05 && isCerebellum) continue;
+        
+        if (isMain) {
+          // Flatten bottom of cerebrum
+          if (ny < -0.3 && nz < 0.2) continue; 
+          
+          // Narrower front
+          if (nz > 0.3 && Math.abs(nx) > (1.0 - 0.6 * nz)) continue;
+          
+          // Dip in middle top
+          if (ny > 0.8 && Math.abs(nz) < 0.2) continue;
         }
         
-        // It's a valid point
+        // Generate points mostly near the surface for a distinct shell shape
+        // This makes it look more like the cortical surface
+        if (isMain && Math.random() > 0.2 && r2 < 0.6) continue;
+        
         return { x, y, z };
       }
     }
 
-    // Reduce particle count to make it less congested
-    const particleCount = isTouchDevice ? 100 : 200;
+    // Increase particle count for denser brain
+    const particleCount = isTouchDevice ? 300 : 800;
     const particles = [];
     const particleGeometry = new THREE.BufferGeometry();
     const particlePositions = new Float32Array(particleCount * 3);
     const particleColors = new Float32Array(particleCount * 3);
     
-    // Custom material to allow individual vertex colors (for pulsing)
+    // Custom material
     const particleMaterial = new THREE.PointsMaterial({
-      size: 3.5,
+      size: 2.5,
       vertexColors: true,
       transparent: true,
       opacity: 0.9,
       sizeAttenuation: true
     });
 
-    const baseColor = new THREE.Color(0x06B6D4);
+    const baseColor = new THREE.Color(0xd946ef); // Fuchsia/Pink core color
 
     for (let i = 0; i < particleCount; i++) {
       const pt = generateBrainPoint();
@@ -139,9 +156,9 @@ export function initNeuralStorm() {
 
     // Line setup
     const lineMaterial = new THREE.LineBasicMaterial({
-      color: 0x00ffff,
+      color: 0x8b5cf6, // Violet connections
       transparent: true,
-      opacity: 0.15
+      opacity: 0.10
     });
     
     // Max lines = (n * (n-1)) / 2
@@ -272,23 +289,25 @@ export function initNeuralStorm() {
       for (let i = 0; i < particleCount; i++) {
         const p = particles[i];
         
-        // Basic movement
+        // Add slightly wobbly velocity
+        p.vx += (Math.random() - 0.5) * 0.04;
+        p.vy += (Math.random() - 0.5) * 0.04;
+        p.vz += (Math.random() - 0.5) * 0.04;
+        
+        // Apply velocity
         p.x += p.vx;
         p.y += p.vy;
-
-        // Bounce
-        if (p.x > window.innerWidth / 2 || p.x < -window.innerWidth / 2) p.vx *= -1;
-        if (p.y > heroSection.clientHeight / 2 || p.y < -heroSection.clientHeight / 2) p.vy *= -1;
+        p.z += p.vz; // Ensure Z is also moving
 
         // Mouse repulsion
         const dx = p.x - mouse.x;
         const dy = p.y - mouse.y;
         const dist = Math.sqrt(dx*dx + dy*dy);
         
-        if (dist < 200) {
-          const force = (200 - dist) / 200;
-          p.x += (dx / dist) * force * 2;
-          p.y += (dy / dist) * force * 2;
+        if (dist < 150) {
+          const force = (150 - dist) / 150;
+          p.vx += (dx / dist) * force * 0.5;
+          p.vy += (dy / dist) * force * 0.5;
         }
 
         // Click shockwave
@@ -297,31 +316,35 @@ export function initNeuralStorm() {
           const cdy = p.y - clickPos.y;
           const cdist = Math.sqrt(cdx*cdx + cdy*cdy);
           
-          // If particle is near the expanding shockwave ring
           if (Math.abs(cdist - shockwaveRadius) < 50) {
-            p.x += (cdx / cdist) * 5;
-            p.y += (cdy / cdist) * 5;
+            p.vx += (cdx / cdist) * 2;
+            p.vy += (cdy / cdist) * 2;
           }
         }
 
-        // Return to baseline gently
-        p.x += (p.baseX - p.x) * 0.005;
-        p.y += (p.baseY - p.y) * 0.005;
+        // Return to baseline gently and apply friction
+        p.vx += (p.baseX - p.x) * 0.02;
+        p.vy += (p.baseY - p.y) * 0.02;
+        p.vz += (p.baseZ - p.z) * 0.02;
+
+        p.vx *= 0.9;
+        p.vy *= 0.9;
+        p.vz *= 0.9;
 
         positions[i * 3] = p.x;
         positions[i * 3 + 1] = p.y;
         positions[i * 3 + 2] = p.z;
 
-        // Colors — blend between white and violet based on pulse intensity
+        // Colors — blend between base and bright cyan based on pulse intensity
         if (p.isPulsing && p.pulseIntensity > 0) {
           const t = p.pulseIntensity;
-          colors[i * 3] = 1 - (1 - 0.48) * t;
-          colors[i * 3 + 1] = 1 - (1 - 0.22) * t;
-          colors[i * 3 + 2] = 1 - (1 - 0.93) * t;
+          colors[i * 3] = baseColor.r + (0 - baseColor.r) * t; // Blend to cyan (0, 1, 1)
+          colors[i * 3 + 1] = baseColor.g + (1 - baseColor.g) * t;
+          colors[i * 3 + 2] = baseColor.b + (1 - baseColor.b) * t;
         } else {
-          colors[i * 3] = 1;
-          colors[i * 3 + 1] = 1;
-          colors[i * 3 + 2] = 1;
+          colors[i * 3] = baseColor.r;
+          colors[i * 3 + 1] = baseColor.g;
+          colors[i * 3 + 2] = baseColor.b;
         }
 
         // Connections
@@ -332,7 +355,8 @@ export function initNeuralStorm() {
           const ddz = p.z - p2.z;
           const distance = Math.sqrt(ddx*ddx + ddy*ddy + ddz*ddz);
 
-          if (distance < 90) {
+          // Reduced distance for denser connections
+          if (distance < 50) {
             linePositions[lineVertexIndex++] = p.x;
             linePositions[lineVertexIndex++] = p.y;
             linePositions[lineVertexIndex++] = p.z;
