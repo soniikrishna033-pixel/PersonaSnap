@@ -125,8 +125,8 @@
   </nav>
 
 <style>
-#hero{position:relative;width:100%;height:580px;overflow:hidden;font-family:'Inter',system-ui,sans-serif;margin-top:0;}
-#c{position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;}
+#hero{position:relative;width:100%;height:580px;display:flex;align-items:center;font-family:'Inter',system-ui,sans-serif;margin-top:0;}
+#c{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-1;}
 .hero-body{position:relative;z-index:5;display:flex;flex-direction:column;justify-content:center;height:580px;padding:0 5%;max-width:700px;margin-right:auto;text-align:left;}
 .eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:22px;}
 .dot{width:7px;height:7px;border-radius:50%;background:#a78bfa;animation:pdot 2.2s ease-in-out infinite;}
@@ -147,14 +147,14 @@
 @keyframes pdot{0%,100%{opacity:.45;transform:scale(1);}50%{opacity:1;transform:scale(1.6);}}
 </style>
 
+<canvas id="c"></canvas>
 <div id="hero">
-  <canvas id="c"></canvas>
   <div class="hero-body container">
     <div class="eyebrow">
       <div class="dot"></div>
       <span>Personality &amp; growth quizzes</span>
     </div>
-    <h1>Discover Yourself.<br><em>Grow Every Day.</em></h1>
+    <h1>Discover <span id="typewriter" style="text-transform: capitalize; color: #f8fafc;">Yourself</span><span style="opacity: 0;">|</span>.<br><em>Grow Every Day.</em></h1>
     <p class="sub">Take powerful personality quizzes. Uncover your hidden traits and strengths. Share your results with the world.</p>
     <div class="btns">
       <button class="btn-p">Start Exploring</button>
@@ -764,19 +764,21 @@ function frame(){
   requestAnimationFrame(frame);
 }
 
-canvas.addEventListener('mousemove',e=>{
-  const r=canvas.getBoundingClientRect();
-  mouse.x=e.clientX-r.left;mouse.y=e.clientY-r.top;
+window.addEventListener('mousemove',e=>{
+  mouse.x=e.clientX;mouse.y=e.clientY;
 });
-canvas.addEventListener('mouseleave',()=>{mouse.x=null;mouse.y=null;});
-canvas.addEventListener('click',e=>{
-  const r=canvas.getBoundingClientRect();
-  const x=e.clientX-r.left,y=e.clientY-r.top;
+window.addEventListener('mouseleave',()=>{mouse.x=null;mouse.y=null;});
+window.addEventListener('click',e=>{
+  const x=e.clientX,y=e.clientY;
   for(let i=0;i<5;i++)ripples.push({x,y,rad:i*4,a:.72-i*.1});
 });
 window.addEventListener('resize',()=>{
-  W=canvas.width=canvas.offsetWidth;
-  H=canvas.height=canvas.offsetHeight;
+  W=canvas.width=window.innerWidth;
+  H=canvas.height=window.innerHeight;
+});
+window.addEventListener('scroll',()=>{
+  let op = 1 - window.scrollY / 600;
+  canvas.style.opacity = Math.max(0.15, Math.min(1, op));
 });
 
 setup();frame();
